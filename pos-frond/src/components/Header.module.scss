@@ -1,0 +1,30 @@
+.header {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 3px;
+  background-color: var(--white-color);
+  /* Olympo unified chrome: Corriente brand accent (token from @olympo/ui) */
+  border-bottom: 2px solid var(--c-primary, #0B8A8F);
+
+  :global(.navbar-brand) {
+    color: var(--c-primary, #0B8A8F) !important;
+    font-family: var(--c-font-display, var(--font-family-sans-serif));
+    font-weight: 700;
+    letter-spacing: -0.015em;
+  }
+}
+
+.sidebar {
+  background-color: var(--white-color);
+  color: var(--dark-color);
+}
+
+.sidebarToggleButton {
+  border: none !important;
+  background-color: transparent !important;
+  color: var(--dark-color) !important;
+
+  &:hover, &:focus, &:active {
+    background-color: var(--light-gray) !important;
+    box-shadow: none !important;
+  }
+}

@@ -1,0 +1,89 @@
+/*
+ * cauce-brand.css — Mapea la marca de Bootstrap / estilos globales de
+ * Sinergia POS a los tokens del design system Olympo (módulo "sinergia").
+ *
+ * Aditivo: se importa DESPUÉS de bootstrap e index.css en src/index.tsx,
+ * por lo que ajusta el acento sin reescribir los estilos existentes.
+ * El acento del módulo proviene de [data-module="sinergia"] (indigo #6366F1)
+ * definido por @olympo/ui/styles.css.
+ */
+
+/* ---- Variables de Bootstrap remapeadas a tokens Olympo ---- */
+:root {
+  --bs-primary: var(--c-accent-module);
+  --bs-primary-rgb: 99, 102, 241; /* #6366F1 → acento módulo sinergia */
+  --bs-link-color: var(--c-primary);
+  --bs-link-hover-color: var(--c-primary-hover);
+  --bs-body-font-family: var(--c-font-sans);
+  --bs-border-radius: var(--c-radius-md);
+  --bs-border-radius-sm: var(--c-radius-sm);
+  --bs-border-radius-lg: var(--c-radius-lg);
+}
+
+/* ---- Tipografía global ---- */
+body {
+  font-family: var(--c-font-sans);
+}
+
+/* ---- Enlaces ---- */
+a {
+  color: var(--c-primary);
+}
+a:hover {
+  color: var(--c-primary-hover);
+}
+
+/* ---- Encabezados con la fuente display de Olympo ---- */
+h1, h2, h3, h4, h5, h6,
+.h1, .h2, .h3, .h4, .h5, .h6 {
+  font-family: var(--c-font-display, var(--c-font-sans));
+}
+
+/*
+ * ---- Botón primario adopta el acento del módulo "sinergia" ----
+ * index.css define .btn-primary con var(--primary-color) (amarillo);
+ * lo reapuntamos al acento de Olympo. Mismo selector → gana por orden
+ * de cascada al importarse después.
+ */
+.btn-primary {
+  background-color: var(--c-accent-module);
+  border-color: var(--c-accent-module);
+  color: var(--c-on-primary, #fff);
+}
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active {
+  background-color: var(--c-accent-module);
+  border-color: var(--c-accent-module);
+  color: var(--c-on-primary, #fff);
+  filter: brightness(0.94);
+}
+
+.btn-outline-primary {
+  color: var(--c-accent-module);
+  border-color: var(--c-accent-module);
+}
+.btn-outline-primary:hover,
+.btn-outline-primary:focus,
+.btn-outline-primary:active {
+  background-color: var(--c-accent-module);
+  border-color: var(--c-accent-module);
+  color: var(--c-on-primary, #fff);
+}
+
+/* ---- Acentos de color/fondo/borde primarios ---- */
+.text-primary {
+  color: var(--c-accent-module) !important;
+}
+.bg-primary {
+  background-color: var(--c-accent-module) !important;
+}
+.border-primary {
+  border-color: var(--c-accent-module) !important;
+}
+
+/* ---- Estado activo de tabs/nav usa el acento del módulo ---- */
+.nav-tabs .nav-link.active,
+.nav-pills .nav-link.active {
+  color: var(--c-accent-module) !important;
+}

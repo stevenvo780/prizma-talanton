@@ -1,0 +1,32 @@
+{
+  "short_name": "Sinergia POS",
+  "name": "Sinergia POS - Sistema de Punto de Venta",
+  "description": "Sistema POS profesional y minimalista para facturación eficiente",
+  "icons": [
+    {
+      "src": "favicon.ico",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "logo.svg",
+      "type": "image/svg+xml",
+      "sizes": "192x192"
+    },
+    {
+      "src": "logo.svg",
+      "type": "image/svg+xml",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "theme_color": "#0B8A8F",
+  "background_color": "#ffffff",
+  "categories": ["business", "finance", "productivity"],
+  "scope": "/",
+  "id": "sinergia-pos",
+  "lang": "es",
+  "dir": "ltr"
+}

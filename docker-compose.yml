@@ -1,0 +1,83 @@
+version: '3.8'
+
+services:
+  # Backend NestJS
+  pos-backend:
+    build:
+      context: ./pos
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+    volumes:
+      - ./pos:/app
+      - /app/node_modules
+    depends_on:
+      - pos-database
+    networks:
+      - pos-network
+
+  # Frontend React
+  pos-frontend:
+    build:
+      context: ./pos-frond
+      dockerfile: Dockerfile
+    ports:
+      - "4002:80"
+    environment:
+      - REACT_APP_API_URL=http://localhost:3000
+    volumes:
+      - ./pos-frond/nginx.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - pos-backend
+    networks:
+      - pos-network
+
+  # Robot Service
+  pos-robot:
+    build:
+      context: ./robotPos
+    ports:
+      - "3005:3005"
+    environment:
+      - NODE_ENV=production
+      - PORT=3005
+    volumes:
+      - ./robotPos:/app
+      - /app/node_modules
+    networks:
+      - pos-network
+
+  # Base de datos (PostgreSQL por defecto, puede cambiarse según configuración)
+  pos-database:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_DB: pos_db
+      POSTGRES_USER: pos_user
+      POSTGRES_PASSWORD: pos_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - pos_db_data:/var/lib/postgresql/data
+    networks:
+      - pos-network
+
+  # Redis para cache (opcional)
+  pos-redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - pos_redis_data:/data
+    networks:
+      - pos-network
+
+volumes:
+  pos_db_data:
+  pos_redis_data:
+
+networks:
+  pos-network:
+    driver: bridge

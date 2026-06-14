@@ -1,0 +1,22 @@
+# Robots.txt for Sinergia POS
+# Sistema de Punto de Venta Profesional
+
+User-agent: *
+Allow: /
+
+# Allow all crawlers to access the main pages
+Allow: /login
+Allow: /register
+Allow: /subscribe
+
+# Disallow access to private/sensitive areas
+Disallow: /pos
+Disallow: /admin
+Disallow: /api
+Disallow: /private
+
+# Sitemap location
+Sitemap: https://sinergia-pos.com/sitemap.xml
+
+# Crawl delay for better server performance
+Crawl-delay: 1
