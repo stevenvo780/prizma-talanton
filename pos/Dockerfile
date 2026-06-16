@@ -40,7 +40,7 @@ RUN chown -R nestjs:nodejs /app
 USER nestjs
 
 # Exponer puerto
-EXPOSE 3000
+EXPOSE 8080
 
 # Comando para iniciar la aplicación
 CMD ["node", "dist/main.js"]
