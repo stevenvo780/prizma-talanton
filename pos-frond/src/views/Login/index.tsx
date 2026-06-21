@@ -166,9 +166,9 @@ const LoginPage: React.FC = () => {
         <div className="showcase-content">
           <div className="showcase-header">
             <Image
-              src="https://firebasestorage.googleapis.com/v0/b/emergent-enterprises.appspot.com/o/assets%2FLogo_talanton_oscuro.png?alt=media&token=fa56c869-c5f2-4dbf-b909-eac96eb1d40b"
+              src="/logo.svg"
               className="showcase-logo"
-              alt="Talanton"
+              alt="Prizma Sinergia"
             />
             <p className="showcase-tagline">
               El sistema de punto de venta más completo de Colombia
@@ -252,9 +252,9 @@ const LoginPage: React.FC = () => {
         <div className="login-form-container">
           <div className="login-form-header">
             <Image
-              src="https://firebasestorage.googleapis.com/v0/b/emergent-enterprises.appspot.com/o/assets%2FLogo_talanton_oscuro.png?alt=media&token=fa56c869-c5f2-4dbf-b909-eac96eb1d40b"
+              src="/logo.svg"
               className="login-mobile-logo"
-              alt="Talanton"
+              alt="Prizma Sinergia"
             />
             <h2 className="login-title">Bienvenido</h2>
             <p className="login-subtitle">
@@ -372,7 +372,7 @@ const LoginPage: React.FC = () => {
         </div>
 
         <div className="login-form-footer">
-          <p>© 2026 Talanton POS by <a href="https://www.prizma.co" target="_blank" rel="noopener noreferrer">Prizma</a></p>
+          <p>© 2026 Prizma Sinergia by <a href="https://prisma-enterprice.cloud" target="_blank" rel="noopener noreferrer">Prizma</a></p>
         </div>
       </div>
 

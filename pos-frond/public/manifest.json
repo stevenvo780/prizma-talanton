@@ -1,12 +1,12 @@
 {
-  "short_name": "Talanton POS",
-  "name": "Talanton POS - Sistema de Punto de Venta",
-  "description": "Sistema POS profesional y minimalista para facturación eficiente",
+  "short_name": "Prizma Sinergia",
+  "name": "Prizma Sinergia - Sistema POS",
+  "description": "Sistema de punto de venta profesional para facturación eficiente e integración empresarial",
   "icons": [
     {
-      "src": "favicon.ico",
-      "sizes": "64x64 32x32 24x24 16x16",
-      "type": "image/x-icon"
+      "src": "favicon.svg",
+      "type": "image/svg+xml",
+      "sizes": "any"
     },
     {
       "src": "logo.svg",
@@ -22,11 +22,11 @@
   "start_url": "/",
   "display": "standalone",
   "orientation": "portrait-primary",
-  "theme_color": "#0B8A8F",
+  "theme_color": "#43b5a6",
   "background_color": "#ffffff",
   "categories": ["business", "finance", "productivity"],
   "scope": "/",
-  "id": "talanton-pos",
+  "id": "prizma-sinergia",
   "lang": "es",
   "dir": "ltr"
 }
