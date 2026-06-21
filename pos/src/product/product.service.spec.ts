@@ -49,6 +49,8 @@ describe('ProductService', () => {
     user: mockUser,
     categories: [],
     state: false,
+    stock: 100,
+    minStock: 10,
   };
 
   beforeEach(async () => {

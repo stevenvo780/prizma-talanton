@@ -1,6 +1,17 @@
 import { Client } from '../../../utils/types';
 import { fmtCOP } from '../../../utils/format';
 
+// Sanitizar HTML para prevenir XSS en impresión de recibos
+const sanitizeHtml = (value: string | undefined): string => {
+  if (!value) return '';
+  return String(value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+};
+
 interface ReceiptData {
   client: Client;
   items: Array<{
@@ -24,20 +35,20 @@ interface ReceiptData {
 export default function Receipt(win: Window, data: ReceiptData): string {
   const { client, items, totals, company, date } = data;
   const header = `
-    <h2>${company?.name || 'Mi Negocio S.A.'}</h2>
+    <h2>${sanitizeHtml(company?.name || 'Mi Negocio S.A.')}</h2>
     <p style="text-align:center;">
-      NIT: ${company?.nit || '999999999-9'}${company?.dv ? '-' + company.dv : ''}<br/>
-      ${company?.legalAddress || 'Dirección'}<br/>
-      Régimen: ${company?.taxRegime || 'General'}
+      NIT: ${sanitizeHtml(company?.nit || '999999999-9')}${company?.dv ? '-' + sanitizeHtml(company.dv) : ''}<br/>
+      ${sanitizeHtml(company?.legalAddress || 'Dirección')}<br/>
+      Régimen: ${sanitizeHtml(company?.taxRegime || 'General')}
     </p>
     <hr/>
     <p>Fecha: ${date}<br/>
-       Cliente: ${client.name} ${client.surname||''} - ${client.documentNumber||''}
+       Cliente: ${sanitizeHtml(client.name)} ${sanitizeHtml(client.surname||'')} - ${sanitizeHtml(client.documentNumber||'')}
     </p>
   `;
   const rows = items.map(i => `
     <tr>
-      <td>${i.product.name}</td>
+      <td>${sanitizeHtml(i.product.name)}</td>
       <td>${i.productQuantity}</td>
       <td>${fmtCOP(i.productSubtotal - i.totalTax + i.totalDiscount)}</td>
       <td>${fmtCOP(i.totalTax)}</td>

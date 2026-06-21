@@ -7,7 +7,7 @@ import * as crypto from 'crypto';
 export interface VentaPOSEvent {
   id: string;
   type: 'venta_pos.creada';
-  source: 'sinergia';
+  source: 'talanton';
   timestamp: Date;
   data: {
     ventaId: number;
@@ -43,31 +43,31 @@ export interface VentaPOSEvent {
 }
 
 @Injectable()
-export class HubCentralService {
-  private hubCentralUrl: string;
+export class PrizmaHubLegacyService {
+  private hubUrl: string;
   private apiKey: string;
 
   constructor(
     private httpService: HttpService,
     private configService: ConfigService,
   ) {
-    this.hubCentralUrl =
-      this.configService.get<string>('HUB_CENTRAL_URL') ||
+    this.hubUrl =
+      this.configService.get<string>('PRIZMA_NOUS_URL') ||
       'http://localhost:3007';
     this.apiKey =
-      this.configService.get<string>('HUB_CENTRAL_API_KEY') ||
-      'sinergia-secret-key';
+      this.configService.get<string>('PRIZMA_NOUS_SECRET') ||
+      'prizma-secret-key';
   }
 
   /**
-   * Envía evento de venta POS creada al Hub Central
+   * Envía evento de venta POS creada al Hub (Nous) vía endpoint legacy.
    */
   async sendVentaPOSCreada(invoice: any, user: any): Promise<void> {
     try {
       const event: VentaPOSEvent = {
         id: this.generateEventId(),
         type: 'venta_pos.creada',
-        source: 'sinergia',
+        source: 'talanton',
         timestamp: new Date(),
         data: {
           ventaId: invoice.id,
@@ -103,50 +103,42 @@ export class HubCentralService {
         },
       };
 
-      // Crear firma HMAC-SHA256
       const payload = JSON.stringify(event);
       const signature = this.createHMACSignature(payload);
 
-      // Enviar al Hub Central
       const response = await firstValueFrom(
         this.httpService.post(
-          `${this.hubCentralUrl}/api/v1/webhooks/venta-pos-creada`,
+          `${this.hubUrl}/api/v1/webhooks/venta-pos-creada`,
           event,
           {
             headers: {
               'Content-Type': 'application/json',
-              'x-sinergia-signature': `sha256=${signature}`,
+              'x-prizma-signature': `sha256=${signature}`,
               'x-api-key': this.apiKey,
             },
-            timeout: 5000, // 5 segundos timeout
+            timeout: 5000,
           },
         ),
       );
 
       console.log(
-        `✅ Evento venta_pos.creada enviado al Hub Central: ${event.id}`,
+        `[prizma] Evento venta_pos.creada enviado al Hub: ${event.id}`,
       );
       console.log(
-        `📋 Response: ${response.status} - ${JSON.stringify(response.data)}`,
+        `[prizma] Response: ${response.status} - ${JSON.stringify(response.data)}`,
       );
     } catch (error) {
       console.error(
-        '❌ Error enviando evento venta_pos.creada al Hub Central:',
+        '[prizma] Error enviando evento venta_pos.creada al Hub:',
         {
           message: error.message,
           response: error.response?.data,
           status: error.response?.status,
         },
       );
-
-      // No lanzar error para no interrumpir el flujo principal de venta
-      // El sistema debe funcionar aunque el Hub Central no esté disponible
     }
   }
 
-  /**
-   * Crea firma HMAC-SHA256 para validación de seguridad
-   */
   private createHMACSignature(payload: string): string {
     return crypto
       .createHmac('sha256', this.apiKey)
@@ -154,33 +146,24 @@ export class HubCentralService {
       .digest('hex');
   }
 
-  /**
-   * Genera ID único para el evento
-   */
   private generateEventId(): string {
-    return `SINERGIA-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+    return `TALANTON-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
   }
 
-  /**
-   * Genera trace ID único para trazabilidad
-   */
   private generateTraceId(): string {
     return crypto.randomUUID();
   }
 
-  /**
-   * Valida la conectividad con Hub Central
-   */
   async healthCheck(): Promise<boolean> {
     try {
       const response = await firstValueFrom(
-        this.httpService.get(`${this.hubCentralUrl}/api/v1/health`, {
+        this.httpService.get(`${this.hubUrl}/api/v1/health`, {
           timeout: 3000,
         }),
       );
       return response.status === 200;
     } catch (error) {
-      console.error('Hub Central health check failed:', error.message);
+      console.error('[prizma] Hub health check failed:', error.message);
       return false;
     }
   }

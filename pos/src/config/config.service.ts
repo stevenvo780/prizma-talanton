@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, DataSource } from 'typeorm';
 import { Config } from './entities/config.entity';
 import { CreateConfigDto } from './dto/create-config.dto';
 import { User } from '../user/entities/user.entity';
@@ -12,6 +12,7 @@ export class ConfigService {
     @InjectRepository(Config)
     private configRepository: Repository<Config>,
     private profileService: ProfileService,
+    private dataSource: DataSource,
   ) {}
 
   async config(createConfigDto: CreateConfigDto, user: User) {
@@ -42,15 +43,15 @@ export class ConfigService {
       config.finalConsecutive = 100;
       config.currentConsecutive = 1;
       config.pluginsConfig = {
-        graf: {
+        hermes: {
           auth_token: '',
           enabled: false,
         },
-        meravuelta: {
+        talaria: {
           auth_token: '',
           enabled: false,
         },
-        fiar: {
+        pistis: {
           auth_token: '',
           enabled: false,
         },
@@ -62,5 +63,50 @@ export class ConfigService {
       return await this.configRepository.save(config);
     }
     return config;
+  }
+
+  /**
+   * Atomically increment the consecutive counter for a user.
+   * Uses an UPDATE statement with INCREMENT to avoid race conditions.
+   * @param userId - The ID of the user
+   * @returns The new consecutive number, or throws error if not found
+   */
+  async incrementConsecutiveAtomic(userId: string): Promise<number> {
+    // Use a database transaction with pessimistic locking (SELECT FOR UPDATE)
+    const queryRunner = this.dataSource.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+
+    try {
+      // Use pessimistic write lock to ensure no race conditions
+      const config = await queryRunner.manager.findOne(Config, {
+        where: { user: { id: userId } },
+        lock: { mode: 'pessimistic_write' },
+        relations: ['user'],
+      });
+
+      if (!config) {
+        throw new Error(`Config not found for user: ${userId}`);
+      }
+
+      // Validate consecutive hasn't exceeded final consecutive
+      if (config.currentConsecutive >= config.finalConsecutive) {
+        throw new Error(
+          `Consecutive number limit reached: ${config.currentConsecutive} >= ${config.finalConsecutive}`,
+        );
+      }
+
+      // Atomically increment the currentConsecutive
+      config.currentConsecutive += 1;
+      const updated = await queryRunner.manager.save(Config, config);
+
+      await queryRunner.commitTransaction();
+      return updated.currentConsecutive;
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+      throw error;
+    } finally {
+      await queryRunner.release();
+    }
   }
 }

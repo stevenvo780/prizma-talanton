@@ -17,9 +17,9 @@ interface State {
 }
 
 const defaultPluginsConfig: ConfigPlugins = {
-  graf: { auth_token: '', enabled: false },
-  meravuelta: { auth_token: '', enabled: false },
-  fiar: { auth_token: '', enabled: false },
+  hermes: { auth_token: '', enabled: false },
+  talaria: { auth_token: '', enabled: false },
+  pistis: { auth_token: '', enabled: false },
 };
 
 const initialState: State = {

@@ -38,7 +38,7 @@ interface TutorialContextValue {
 }
 
 /* ── Storage helpers ───────────────────────────────────── */
-const STORAGE_KEY = 'sinergia_seen_tours';
+const STORAGE_KEY = 'talanton_seen_tours';
 
 function loadSeen(): Set<string> {
   try {

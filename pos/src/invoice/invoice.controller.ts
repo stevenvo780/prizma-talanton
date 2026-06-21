@@ -124,8 +124,12 @@ export class InvoiceController {
   @ApiOkResponse({ description: 'The invoice has been successfully updated.' })
   @ApiNotFoundResponse({ description: 'Invoice not found.' })
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateInvoiceDto: UpdateInvoiceDto) {
-    return this.invoiceService.update(+id, updateInvoiceDto);
+  update(
+    @Request() req: RequestWithUser,
+    @Param('id') id: string,
+    @Body() updateInvoiceDto: UpdateInvoiceDto,
+  ) {
+    return this.invoiceService.update(+id, updateInvoiceDto, req.user.id);
   }
 
   @ApiOperation({ summary: 'Delete an invoice by ID' })
@@ -134,7 +138,7 @@ export class InvoiceController {
   })
   @ApiNotFoundResponse({ description: 'Invoice not found.' })
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.invoiceService.remove(+id);
+  remove(@Request() req: RequestWithUser, @Param('id') id: string) {
+    return this.invoiceService.remove(+id, req.user.id);
   }
 }

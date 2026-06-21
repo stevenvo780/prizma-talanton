@@ -1,8 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, Button, Form, Row, Col } from 'react-bootstrap';
-import Select from 'react-select';
+import Select, { MultiValue, ActionMeta } from 'react-select';
 import api from '../../utils/axios';
 import { Product, ProductPriceType, SelectInterface, Discounts, Taxes, Operators, User } from '../../utils/types';
+
+interface SelectOptionWithExtra extends SelectInterface {
+  discountValue?: number;
+  taxValue?: number;
+}
 
 interface ProductModalProps {
   showModal: boolean;
@@ -14,15 +19,15 @@ interface ProductModalProps {
   sortName: string;
   setSortName: (sortName: string) => void;
   selectedCategories: SelectInterface[];
-  handleCategoriesChange: (selectedOptions: any) => void;
+  handleCategoriesChange: (newValue: MultiValue<SelectInterface>, actionMeta: ActionMeta<SelectInterface>) => void;
   selectCategories: SelectInterface[];
   state: boolean;
-  setState: any;
+  setState: (updater: ((prevState: boolean) => boolean) | boolean) => void;
   handleImageChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   image: string | null;
   description: string;
   handleDescriptionChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  setPriceTypes: any;
+  setPriceTypes: (updater: ((prevTypes: ProductPriceType[]) => ProductPriceType[]) | ProductPriceType[]) => void;
   priceTypes: ProductPriceType[];
 }
 
@@ -52,58 +57,102 @@ const ProductModal: React.FC<ProductModalProps> = ({
   const [taxesSelect, setTaxesSelect] = useState<SelectInterface[]>([]);
 
 
+  interface CategoryPricingResponse {
+    id: number;
+    name: string;
+  }
+
+  interface DiscountResponse {
+    id: number;
+    name: string;
+    value: number;
+  }
+
+  interface TaxResponse {
+    id: number;
+    name: string;
+    value: number;
+  }
+
   const fetchCategoryPricings = async () => {
-    const { data } = await api.get('/category-pricing');
-    const options = data.map((item: any) => ({ value: item.id, label: item.name }));
+    const { data } = await api.get<CategoryPricingResponse[]>('/category-pricing');
+    const options = data.map((item) => ({ value: item.id, label: item.name }));
     setCategoryPricingsSelect(options);
   };
 
   const fetchDiscounts = async () => {
-    const response = await api.get('/discounts');
-    const options = response.data.map((item: any) => ({ value: item.id, label: item.name, discountValue: item.value }));
+    const response = await api.get<DiscountResponse[]>('/discounts');
+    const options: SelectOptionWithExtra[] = response.data.map((item) => ({ value: item.id, label: item.name, discountValue: item.value }));
     setDiscountsSelect(options);
   };
 
   const fetchTaxes = async () => {
-    const response = await api.get('/taxes');
-    const options = response.data.map((item: any) => ({ value: item.id, label: item.name, taxValue: item.value }));
+    const response = await api.get<TaxResponse[]>('/taxes');
+    const options: SelectOptionWithExtra[] = response.data.map((item) => ({ value: item.id, label: item.name, taxValue: item.value }));
     setTaxesSelect(options);
   };
 
-  const handlePriceTypeChange = (index: number, field: keyof ProductPriceType, value: any) => {
+  interface SelectOptionObject {
+    value: number | string;
+    label: string;
+    discountValue?: number;
+    taxValue?: number;
+  }
+
+  const handlePriceTypeChange = (
+    index: number,
+    field: keyof ProductPriceType,
+    value: SelectOptionObject[] | SelectOptionObject | number | string | null | undefined | any
+  ) => {
     const newPriceTypes = [...priceTypes];
-    if (newPriceTypes[index]) {
-      if (Array.isArray(value)) {
-        if (field === 'discounts') {
-          newPriceTypes[index][field] = value.map(item => {
-            const found = discountsSelect.find(discount => discount.value === item.value);
-            return found ? { id: Number(found.value), name: found.label, value: item.discountValue, operator: Operators.Percentage, user: {} as User } : undefined;
-          }).filter(item => item !== undefined) as Discounts[];
-        }
-        if (field === 'taxes') {
-          newPriceTypes[index][field] = value.map(item => {
-            const found = taxesSelect.find(tax => tax.value === item.value);
-            return found ? { id: Number(found.value), name: found.label, value: item.taxValue, operator: Operators.Percentage, user: {} as User } : undefined;
-          }).filter(item => item !== undefined) as Taxes[];
-        }
-      } else if (value && typeof value === 'object' && value.value && value.label) {
-        if (field === 'category') {
-          const selectedCategory = categoryPricingsSelect.find(cat => cat.value === value.value);
-          if (selectedCategory) {
-            newPriceTypes[index][field] = { id: Number(selectedCategory.value), name: selectedCategory.label };
-          }
-        }
-      } else if (typeof value === 'number') {
-        if (field === 'price') {
-          newPriceTypes[index][field] = value;
-        }
-      } else if (typeof value === 'string') {
-        if (field === 'sku') {
-          newPriceTypes[index][field] = value;
+    if (!newPriceTypes[index]) return;
+
+    if (Array.isArray(value)) {
+      if (field === 'discounts') {
+        newPriceTypes[index][field] = value
+          .map((item) => {
+            const found = discountsSelect.find((discount) => discount.value === item.value);
+            return found
+              ? {
+                  id: Number(found.value),
+                  name: found.label,
+                  value: 'discountValue' in item ? item.discountValue! : 0,
+                  operator: Operators.Percentage,
+                  user: {} as User,
+                }
+              : undefined;
+          })
+          .filter((item): item is Discounts => item !== undefined);
+      } else if (field === 'taxes') {
+        newPriceTypes[index][field] = value
+          .map((item) => {
+            const found = taxesSelect.find((tax) => tax.value === item.value);
+            return found
+              ? {
+                  id: Number(found.value),
+                  name: found.label,
+                  value: 'taxValue' in item ? item.taxValue! : 0,
+                  operator: Operators.Percentage,
+                  user: {} as User,
+                }
+              : undefined;
+          })
+          .filter((item): item is Taxes => item !== undefined);
+      }
+    } else if (value && typeof value === 'object' && 'value' in value && 'label' in value) {
+      if (field === 'category') {
+        const selectedCategory = categoryPricingsSelect.find((cat) => cat.value === value.value);
+        if (selectedCategory) {
+          newPriceTypes[index][field] = { id: Number(selectedCategory.value), name: selectedCategory.label } as any;
         }
       }
-      setPriceTypes(newPriceTypes);
+    } else if (typeof value === 'number' && field === 'price') {
+      newPriceTypes[index][field] = value as any;
+    } else if (typeof value === 'string' && field === 'sku') {
+      newPriceTypes[index][field] = value as any;
     }
+
+    setPriceTypes(newPriceTypes);
   };
 
   const removePriceType = (id: number) => {
@@ -112,16 +161,16 @@ const ProductModal: React.FC<ProductModalProps> = ({
 
   const addPriceType = () => {
     const nextCategory = categoryPricingsSelect.find(
-      category => !priceTypes.some(priceType => priceType.category?.id === category.value)
+      category => !priceTypes.some(priceType => priceType.category?.id === Number(category.value))
     );
     if (nextCategory) {
       setPriceTypes([...priceTypes, {
-        category: { id: nextCategory.value, name: nextCategory.label },
+        category: { id: Number(nextCategory.value), name: nextCategory.label },
         price: 0,
         sku: '',
         taxes: [],
         discounts: []
-      }]);
+      } as ProductPriceType]);
     }
   }
 

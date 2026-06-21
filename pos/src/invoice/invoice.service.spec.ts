@@ -8,11 +8,11 @@ import { Client } from '../client/entities/client.entity';
 import { User } from '../user/entities/user.entity';
 import { ConfigService } from '../config/config.service';
 import { CashBoxService } from '../cash-box/cash-box.service';
-import { MeraVueltaService } from '../meravuelta/meravuelta.service';
+import { TalariaService } from '../talaria/talaria.service';
 import { MailjetService } from '../mailjet/mailjet.service';
 import { EventBusService } from '../shared/event-bus.service';
-import { HubCentralService } from '../hubcentral/hubcentral.service';
-import { OlympoHubService } from '../cauce/hub.service';
+import { PrizmaHubLegacyService } from '../prizma-hub/prizma-hub.service';
+import { PrizmaHubService } from '../prizma/prizma-hub.service';
 import { CreateInvoiceDto } from './dto/create-invoice.dto';
 
 describe('InvoiceService', () => {
@@ -22,7 +22,7 @@ describe('InvoiceService', () => {
   let clientRepository: jest.Mocked<Repository<Client>>;
   let configService: jest.Mocked<ConfigService>;
   let cashBoxService: jest.Mocked<CashBoxService>;
-  let meravueltaService: jest.Mocked<MeraVueltaService>;
+  let talariaService: jest.Mocked<TalariaService>;
 
   const mockUser: User = {
     id: 'user-1',
@@ -85,6 +85,8 @@ describe('InvoiceService', () => {
     user: mockUser,
     categories: [],
     state: false,
+    stock: 100,
+    minStock: 10,
   };
 
   beforeEach(async () => {
@@ -130,7 +132,7 @@ describe('InvoiceService', () => {
           },
         },
         {
-          provide: MeraVueltaService,
+          provide: TalariaService,
           useValue: {
             createInvoiceFromInvoice: jest.fn(),
           },
@@ -150,13 +152,13 @@ describe('InvoiceService', () => {
           },
         },
         {
-          provide: HubCentralService,
+          provide: PrizmaHubLegacyService,
           useValue: {
             sendVentaPOSCreada: jest.fn(),
           },
         },
         {
-          provide: OlympoHubService,
+          provide: PrizmaHubService,
           useValue: {
             publish: jest.fn().mockResolvedValue(true),
             publishPosSaleCreated: jest.fn().mockResolvedValue(true),
@@ -171,7 +173,7 @@ describe('InvoiceService', () => {
     clientRepository = module.get(getRepositoryToken(Client));
     configService = module.get(ConfigService);
     cashBoxService = module.get(CashBoxService);
-    meravueltaService = module.get(MeraVueltaService);
+    talariaService = module.get(TalariaService);
   });
 
   it('should be defined', () => {
@@ -267,9 +269,9 @@ describe('InvoiceService', () => {
         initialConsecutive: 1,
         finalConsecutive: 1000,
         pluginsConfig: {
-          graf: { auth_token: '' as const, enabled: false },
-          meravuelta: { auth_token: '' as const, enabled: false },
-          fiar: { auth_token: '' as const, enabled: false },
+          hermes: { auth_token: '' as const, enabled: false },
+          talaria: { auth_token: '' as const, enabled: false },
+          pistis: { auth_token: '' as const, enabled: false },
         },
         user: mockUser,
       } as any;
@@ -289,7 +291,7 @@ describe('InvoiceService', () => {
       configService.config.mockResolvedValue(undefined);
       invoiceRepository.save.mockResolvedValue(mockInvoice);
       cashBoxService.cashIn.mockResolvedValue(undefined);
-      meravueltaService.createInvoiceFromInvoice.mockResolvedValue(undefined);
+      talariaService.createInvoiceFromInvoice.mockResolvedValue(undefined);
 
       const result = await service.create(createInvoiceDto, mockUser, 1);
 

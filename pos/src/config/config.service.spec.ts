@@ -39,9 +39,9 @@ describe('ConfigService', () => {
     finalConsecutive: 9999,
     currentConsecutive: 1005,
     pluginsConfig: {
-      graf: { auth_token: '', enabled: false },
-      meravuelta: { auth_token: '', enabled: false },
-      fiar: { auth_token: '', enabled: false },
+      hermes: { auth_token: '', enabled: false },
+      talaria: { auth_token: '', enabled: false },
+      pistis: { auth_token: '', enabled: false },
     },
     user: mockUser,
   };

@@ -35,8 +35,8 @@ export class Profile {
         auth_token_total_pedido: '',
         enabled: false,
       },
-      meravuelta: {
-        auth_token_meravuelta: '',
+      talaria: {
+        auth_token_talaria: '',
         enabled: false,
       },
     },

@@ -15,15 +15,15 @@ export enum TypeDocument {
 }
 
 export interface ConfigPlugins {
-  graf: {
+  hermes: {
     auth_token: string;
     enabled: boolean;
   };
-  meravuelta: {
+  talaria: {
     auth_token: string;
     enabled: boolean;
   };
-  fiar: {
+  pistis: {
     auth_token: string;
     enabled: boolean;
   };
@@ -120,6 +120,8 @@ export interface Product {
   description: string;
   image?: string;
   state: boolean;
+  stock?: number;
+  minStock?: number;
   priceTypes: ProductPriceType[];
   categories: Category[];
   user?: User;
@@ -144,6 +146,7 @@ export interface ProductPriceType {
   sku: string;
   category?: CategoryPricing;
   price?: number;
+  availableStock?: number;
   discounts?: Discounts[];
   taxes?: Taxes[];
   user?: User;

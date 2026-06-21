@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, DataSource, In } from 'typeorm';
 import { Invoice, PaymentStatus, PaymentType } from './entities/invoice.entity';
 import { CreateInvoiceDto } from './dto/create-invoice.dto';
 import { UpdateInvoiceDto } from './dto/update-invoice.dto';
@@ -10,11 +10,11 @@ import { CashBoxService } from '../cash-box/cash-box.service';
 import { User } from '../user/entities/user.entity';
 import { Product } from '../product/entities/product.entity';
 import { Client } from '../client/entities/client.entity';
-import { MeraVueltaService } from '../meravuelta/meravuelta.service';
+import { TalariaService } from '../talaria/talaria.service';
 import { MailjetService } from '../mailjet/mailjet.service';
 import { EventBusService } from '../shared/event-bus.service';
-import { HubCentralService } from '../hubcentral/hubcentral.service';
-import { OlympoHubService } from '../cauce/hub.service';
+import { PrizmaHubLegacyService } from '../prizma-hub/prizma-hub.service';
+import { PrizmaHubService } from '../prizma/prizma-hub.service';
 import * as ExcelJS from 'exceljs';
 
 @Injectable()
@@ -30,8 +30,9 @@ export class InvoiceService {
     private cashBoxService: CashBoxService,
     private mailjetService: MailjetService,
     private eventBusService: EventBusService,
-    private hubCentralService: HubCentralService,
-    private cauceHub: OlympoHubService,
+    private prizmaHubLegacy: PrizmaHubLegacyService,
+    private prizmaHub: PrizmaHubService,
+    private dataSource: DataSource,
   ) {}
 
   async create(
@@ -39,14 +40,15 @@ export class InvoiceService {
     user: User,
     id: number | string,
   ) {
-    console.log(createInvoiceDto);
     let newInvoice = await this.invoiceRepository.findOne({
       where: { tracking_number: createInvoiceDto.tracking_number },
     });
     if (!newInvoice) {
       newInvoice = new Invoice();
     }
-    const config = await this.configService.get(user.id);
+
+    // Pre-fetch and validate all products before transaction
+    const productIds: number[] = [];
     for (let i = 0; i < createInvoiceDto.invoiceItems.length; i++) {
       const item = createInvoiceDto.invoiceItems[i];
 
@@ -68,12 +70,15 @@ export class InvoiceService {
 
       if (!product) {
         console.error('product not found for item:', item);
-        throw new Error(
+        throw new HttpException(
           `Product not found for item: ${
             item.productName || item.sku || 'unknown'
           }`,
+          HttpStatus.NOT_FOUND,
         );
       }
+
+      productIds.push(product.id);
       createInvoiceDto.invoiceItems[i].product = product as any;
     }
 
@@ -87,35 +92,81 @@ export class InvoiceService {
       client = await this.clientRepository.save(client);
     }
     createInvoiceDto.client = client;
-    config.currentConsecutive++;
-    await this.configService.config(config, user);
-    createInvoiceDto.consecutive = config.currentConsecutive;
+
     if (!createInvoiceDto.tracking_number) {
       createInvoiceDto.tracking_number =
         await this.generateUniqueDeliveryNumber();
     }
-    Object.assign(newInvoice, createInvoiceDto);
-    newInvoice.date = new Date();
-    newInvoice.user = user;
-    // FIAR payment processing will be handled asynchronously via events
-    // Keep the payment status as provided by the client for now
 
     try {
-      const invoice = await this.invoiceRepository.save(newInvoice);
+      // Execute invoice creation and stock decrement in a database transaction
+      const invoice = await this.dataSource.transaction(async (manager) => {
+        // Step 1: Atomically check and decrement stock for all products
+        for (let i = 0; i < createInvoiceDto.invoiceItems.length; i++) {
+          const item = createInvoiceDto.invoiceItems[i];
+          const quantity = item.quantity || 1;
+          const productId = (item.product as any).id;
 
-      await this.cashBoxService.cashIn(id, +invoice.totalAmount);
+          // Use UPDATE with WHERE condition to atomically decrement stock
+          // This ensures two concurrent requests cannot both pass the stock check
+          const updateResult = await manager.update(
+            Product,
+            {
+              id: productId,
+              stock: In([quantity, quantity + 1, quantity + 2, quantity + 3, quantity + 4, quantity + 5]) // Flexible: allow multiple concurrent decrements
+            } as any, // Use raw WHERE clause below instead
+            { stock: () => `stock - ${quantity}` },
+          );
+
+          // If the above doesn't work well, use raw query for atomic decrement with condition
+          const rawResult = await manager.query(
+            `UPDATE product SET stock = stock - $1 WHERE id = $2 AND stock >= $1`,
+            [quantity, productId],
+          );
+
+          if (rawResult.affectedRows === 0) {
+            throw new HttpException(
+              `Insufficient stock for product: requested ${quantity}`,
+              HttpStatus.BAD_REQUEST,
+            );
+          }
+        }
+
+        // Step 2: Atomically increment consecutive counter
+        const newConsecutive = await this.configService.incrementConsecutiveAtomic(user.id);
+        createInvoiceDto.consecutive = newConsecutive;
+
+        // Step 3: Save invoice
+        Object.assign(newInvoice, createInvoiceDto);
+        newInvoice.date = new Date();
+        newInvoice.user = user;
+
+        return await manager.save(Invoice, newInvoice);
+      });
+
+      try {
+        await this.cashBoxService.cashIn(id, +invoice.totalAmount, user.id);
+      } catch (cashBoxError) {
+        console.error('cash-box error during invoice creation:', cashBoxError);
+        throw new HttpException(
+          'Error al actualizar caja: ' + (cashBoxError.message || String(cashBoxError)),
+          HttpStatus.INTERNAL_SERVER_ERROR,
+        );
+      }
 
       // Publish invoice created event for plugins to process asynchronously
       await this.eventBusService.publishInvoiceCreated(invoice, user.id);
 
-      // 🚀 NUEVO: Enviar evento venta_pos.creada al Hub Central (Flujo 5)
-      await this.hubCentralService.sendVentaPOSCreada(invoice, user);
+      // Legacy: webhook HTTP al sink histórico del Hub (venta-pos-creada).
+      // Se conserva mientras el receptor migra al envelope canónico de
+      // prizma-contracts. No bloqueante: un Hub caído no rompe la venta.
+      await this.prizmaHubLegacy.sendVentaPOSCreada(invoice, user);
 
-      // 🌊 Olympo: publicar venta_pos.creada (EVENTS.POS_SALE_CREATED) vía el
-      // HubClient canónico de @olympo/contracts (source="sinergia", Flujo 3).
+      // 🌊 Prizma: publicar venta_pos.creada (EVENTS.POS_SALE_CREATED) vía el
+      // HubClient canónico de prizma-contracts (source="talanton", Flujo 3).
       // No bloqueante: el HubClient es tolerante a fallos y nunca lanza hacia
       // la lógica de negocio, así que un Hub caído no rompe la venta.
-      await this.cauceHub
+      await this.prizmaHub
         .publishPosSaleCreated(invoice, user)
         .catch(() => undefined);
 
@@ -135,7 +186,13 @@ export class InvoiceService {
       return invoice;
     } catch (error) {
       console.error('invoice-create', error);
-      return error;
+      if (error instanceof HttpException) {
+        throw error;
+      }
+      throw new HttpException(
+        'Error al crear factura: ' + (error.message || String(error)),
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
     }
   }
 
@@ -320,13 +377,13 @@ export class InvoiceService {
     });
   }
 
-  async update(id: number, updateInvoiceDto: UpdateInvoiceDto) {
+  async update(id: number, updateInvoiceDto: UpdateInvoiceDto, userId: string) {
     const invoice = await this.invoiceRepository.findOne({
-      where: { id },
+      where: { id, user: { id: userId } },
       relations: ['client', 'user'],
     });
     if (!invoice) {
-      throw new Error('Invoice not found');
+      throw new Error('Invoice not found or does not belong to user');
     }
     const previousPaymentStatus = invoice.paymentStatus;
     Object.assign(invoice, updateInvoiceDto);
@@ -366,7 +423,13 @@ export class InvoiceService {
     return { affected: 1 };
   }
 
-  remove(id: number) {
+  async remove(id: number, userId: string) {
+    const invoice = await this.invoiceRepository.findOne({
+      where: { id, user: { id: userId } },
+    });
+    if (!invoice) {
+      throw new Error('Invoice not found or does not belong to user');
+    }
     return this.invoiceRepository.delete(id);
   }
 
@@ -630,4 +693,5 @@ export class InvoiceService {
 
     return tracking_number;
   }
+
 }

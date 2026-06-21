@@ -10,7 +10,7 @@ import { Product } from '../product/entities/product.entity';
 import { Client } from '../client/entities/client.entity';
 import { MailjetModule } from '../mailjet/mailjet.module';
 import { SharedModule } from '../shared/shared.module';
-import { HubCentralModule } from '../hubcentral/hubcentral.module';
+import { PrizmaHubLegacyModule } from '../prizma-hub/prizma-hub.module';
 
 @Module({
   imports: [
@@ -20,7 +20,7 @@ import { HubCentralModule } from '../hubcentral/hubcentral.module';
     CashBoxModule,
     MailjetModule,
     SharedModule,
-    HubCentralModule,
+    PrizmaHubLegacyModule,
   ],
   controllers: [InvoiceController],
   providers: [InvoiceService],

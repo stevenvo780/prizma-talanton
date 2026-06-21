@@ -24,7 +24,7 @@ interface CartSummaryProps {
   priceTypes: CategoryPricing[];
   selectPriceType: CategoryPricing | undefined;
   handleSelectPriceType: (priceType: CategoryPricing | undefined) => void;
-  handleQuantityChange: (productKey: string, event: any) => void;
+  handleQuantityChange: (productKey: string, event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
   handleRemoveProduct: (productToRemove: Product, priceTypeIdToRemove: number | undefined) => void;
   clearCart: () => void;
   onEditClient?: () => void;

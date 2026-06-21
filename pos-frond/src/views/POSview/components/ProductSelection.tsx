@@ -3,7 +3,7 @@ import { Row, Col, Card, Button } from 'react-bootstrap';
 import { Product, Category, CategoryPricing } from '../../../utils/types';
 import { fmtCOP } from '../../../utils/format';
 import Select from 'react-select';
-import { Plus } from 'react-bootstrap-icons';
+import { Plus, BoxSeam } from 'react-bootstrap-icons'; // Plus ya está importado
 
 interface CategoryOption {
   value: string;
@@ -29,6 +29,8 @@ interface ProductSelectionProps {
   selectPriceType: CategoryPricing | undefined;
   getProductsApi: () => void;
   onOpenCreateProduct?: () => void;
+  isSearchActive?: boolean;
+  isFilterActive?: boolean;
 }
 
 const ProductSelection: React.FC<ProductSelectionProps> = ({
@@ -42,7 +44,9 @@ const ProductSelection: React.FC<ProductSelectionProps> = ({
   handleProductClick,
   selectPriceType,
   getProductsApi,
-  onOpenCreateProduct
+  onOpenCreateProduct,
+  isSearchActive = false,
+  isFilterActive = false
 }) => {
   const allOption: CategoryOption = { value: 'all', label: 'Todas las categorías' };
   const categoryOptions: CategoryOption[] = [
@@ -85,7 +89,7 @@ const ProductSelection: React.FC<ProductSelectionProps> = ({
             onChange={handleCategoryChange}
             defaultValue={allOption}
             classNamePrefix="react-select"
-            styles={{ container: base => ({ ...base, flex: 1 }) }}
+            styles={{ container: (base: Record<string, unknown>) => ({ ...base, flex: 1 }) }}
           />
         </Col>
         <Col md={5}>
@@ -98,7 +102,7 @@ const ProductSelection: React.FC<ProductSelectionProps> = ({
             classNamePrefix="react-select"
             isSearchable
             isClearable
-            styles={{ container: base => ({ ...base, flex: 1 }) }}
+            styles={{ container: (base: Record<string, unknown>) => ({ ...base, flex: 1 }) }}
             filterOption={(option, inputValue) =>
               option.label.toLowerCase().includes(inputValue.toLowerCase())
             }
@@ -119,8 +123,33 @@ const ProductSelection: React.FC<ProductSelectionProps> = ({
         </Col>
       </Row>
       <div style={{ maxHeight: '70vh', overflowY: 'auto', overflowX: 'hidden' }}>
-        <Row>
-          {products.map((product, i) => {
+        {products.length === 0 ? (
+          <div style={{ textAlign: 'center', padding: '3rem 2rem', color: '#666' }}>
+            <BoxSeam size={48} style={{ marginBottom: '1rem', opacity: 0.5 }} />
+            <p style={{ fontSize: '1rem', marginBottom: '0.5rem', fontWeight: '500' }}>
+              {isSearchActive ? 'Búsqueda sin resultados' : isFilterActive ? 'No hay productos en esta categoría' : 'No hay productos disponibles'}
+            </p>
+            <p style={{ fontSize: '0.9rem', color: '#999' }}>
+              {isSearchActive
+                ? 'Intenta con otros términos de búsqueda'
+                : isFilterActive
+                ? 'Prueba con otra categoría o precio'
+                : onOpenCreateProduct ? 'Crea el primer producto para comenzar' : 'Agrega productos a tu inventario'}
+            </p>
+            {onOpenCreateProduct && !isSearchActive && !isFilterActive && (
+              <Button
+                variant="outline-primary"
+                size="sm"
+                onClick={onOpenCreateProduct}
+                className="mt-2"
+              >
+                <Plus size={14} className="me-1" /> Crear Producto
+              </Button>
+            )}
+          </div>
+        ) : (
+          <Row>
+            {products.map((product, i) => {
             let displayPrice = 'N/A';
             let priceCategoryName = '';
             if (selectPriceType) {
@@ -156,8 +185,9 @@ const ProductSelection: React.FC<ProductSelectionProps> = ({
                 </Card>
               </Col>
             );
-          })}
-        </Row>
+            })}
+          </Row>
+        )}
       </div>
     </>
   );

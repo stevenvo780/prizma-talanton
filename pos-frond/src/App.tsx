@@ -16,7 +16,7 @@ const override: any = {
 function App() {
   const loading = useSelector((state: RootState) => state.ui.loading);
   return (
-    <div className="cui-root" data-module="sinergia">
+    <div className="cui-root" data-module="talanton">
       {
         loading === true && (
           <div className="loader">

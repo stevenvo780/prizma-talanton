@@ -1,6 +1,6 @@
-# Sinergia POS
+# Talanton POS
 
-Sistema POS del ecosistema Humanizar con backend, frontend y servicio robot.
+Sistema POS del ecosistema Prizma con backend, frontend y servicio robot.
 
 ## Componentes
 
@@ -20,7 +20,7 @@ Sistema POS del ecosistema Humanizar con backend, frontend y servicio robot.
 ## Arranque rapido
 
 ```bash
-cd Sinergia
+cd Talanton
 docker compose up --build
 ```
 

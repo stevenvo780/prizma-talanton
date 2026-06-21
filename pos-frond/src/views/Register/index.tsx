@@ -96,6 +96,7 @@ const RegisterPage: React.FC = () => {
               placeholder="Correo"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              required
             />
           </Form.Group>
             <br />
@@ -105,6 +106,8 @@ const RegisterPage: React.FC = () => {
                 placeholder="Contraseña"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                required
+                minLength={6}
               />
             </Form.Group>
             <br />
@@ -114,6 +117,8 @@ const RegisterPage: React.FC = () => {
                 placeholder="Confirmar contraseña"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
+                required
+                minLength={6}
               />
             </Form.Group>
             <br />
@@ -123,6 +128,7 @@ const RegisterPage: React.FC = () => {
                 placeholder="Nombre"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
+                required
               />
             </Form.Group>
             <br />
@@ -132,6 +138,7 @@ const RegisterPage: React.FC = () => {
                 placeholder="Apellido"
                 value={surname}
                 onChange={(e) => setSurname(e.target.value)}
+                required
               />
             </Form.Group></Col>
           <Col sm={5}>   <Form.Group controlId="formBasicPhone">
@@ -140,6 +147,7 @@ const RegisterPage: React.FC = () => {
               placeholder="Teléfono"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
+              required
             />
           </Form.Group>
             <br />
@@ -158,11 +166,12 @@ const RegisterPage: React.FC = () => {
                 placeholder="Nombre de la compañía"
                 value={companyName}
                 onChange={(e) => setCompanyName(e.target.value)}
+                required
               />
             </Form.Group>
             <br />
             <Form.Group controlId="formBasicTypeDocument">
-              <Form.Control as="select" value={typeDocument} onChange={(e) => setTypeDocument(e.target.value as TypeDocuments)}>
+              <Form.Control as="select" value={typeDocument} onChange={(e) => setTypeDocument(e.target.value as TypeDocuments)} required>
                 <option value={TypeDocuments.CC}>CC</option>
                 <option value={TypeDocuments.NIT}>NIT</option>
               </Form.Control>
@@ -174,6 +183,7 @@ const RegisterPage: React.FC = () => {
                 placeholder="Número de Documento"
                 value={documentNumber}
                 onChange={(e) => setDocumentNumber(e.target.value)}
+                required
               />
             </Form.Group>
           </Col>

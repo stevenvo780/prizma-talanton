@@ -4,7 +4,7 @@ import { firstValueFrom } from 'rxjs';
 import { Transaction } from './types';
 
 @Injectable()
-export class FiarService {
+export class PistisService {
   constructor(private httpService: HttpService) {}
 
   async createTransaction(

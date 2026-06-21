@@ -20,7 +20,7 @@ describe('AppService', () => {
     it('should return welcome message', () => {
       const result = service.getHello();
       expect(result).toBe(
-        'Bienvenido a humanizar, puedes ver la documentación en /api',
+        'Bienvenido a prizma, puedes ver la documentación en /api',
       );
     });
   });

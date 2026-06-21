@@ -10,6 +10,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Request } from 'express';
 import { User } from '../user/entities/user.entity';
+import admin from '../utils/firebase-admin.config';
 
 @Injectable()
 export class FirebaseAuthGuard implements CanActivate {
@@ -43,8 +44,9 @@ export class FirebaseAuthGuard implements CanActivate {
     const token = authHeader.split('Bearer ')[1];
 
     try {
-      const decodedToken = this.decodeToken(token);
-      const userId = decodedToken.user_id || decodedToken.sub;
+      // Verify token signature with Firebase Admin SDK (fail-closed)
+      const decodedToken = await admin.auth().verifyIdToken(token);
+      const userId = decodedToken.uid;
 
       if (!userId) {
         throw new UnauthorizedException('Invalid token: No user ID found');
@@ -107,14 +109,4 @@ export class FirebaseAuthGuard implements CanActivate {
     }
   }
 
-  private decodeToken(token: string): any {
-    try {
-      const base64Payload = token.split('.')[1];
-      const payload = Buffer.from(base64Payload, 'base64').toString('utf8');
-      return JSON.parse(payload);
-    } catch (error) {
-      console.error('Error decoding token:', error);
-      throw new UnauthorizedException('Invalid token format');
-    }
-  }
 }

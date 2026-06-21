@@ -1,6 +1,6 @@
 {
-  "short_name": "Sinergia POS",
-  "name": "Sinergia POS - Sistema de Punto de Venta",
+  "short_name": "Talanton POS",
+  "name": "Talanton POS - Sistema de Punto de Venta",
   "description": "Sistema POS profesional y minimalista para facturación eficiente",
   "icons": [
     {
@@ -26,7 +26,7 @@
   "background_color": "#ffffff",
   "categories": ["business", "finance", "productivity"],
   "scope": "/",
-  "id": "sinergia-pos",
+  "id": "talanton-pos",
   "lang": "es",
   "dir": "ltr"
 }

@@ -67,7 +67,7 @@ export class EventBusService {
     const event: BusinessEvent = {
       id: this.generateEventId(),
       type: 'invoice.created',
-      source: 'sinergia',
+      source: 'talanton',
       timestamp: new Date(),
       data: {
         invoice: {
@@ -95,7 +95,7 @@ export class EventBusService {
     const event: BusinessEvent = {
       id: this.generateEventId(),
       type: 'invoice.updated',
-      source: 'sinergia',
+      source: 'talanton',
       timestamp: new Date(),
       data: {
         invoice: {
@@ -123,7 +123,7 @@ export class EventBusService {
     const event: BusinessEvent = {
       id: this.generateEventId(),
       type: 'payment.completed',
-      source: 'sinergia',
+      source: 'talanton',
       timestamp: new Date(),
       data: {
         invoice: {

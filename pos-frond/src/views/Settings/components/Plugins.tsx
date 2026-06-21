@@ -6,15 +6,15 @@ import { addNotification } from '../../../redux/ui';
 import { Config, ConfigPlugins } from '../../../utils/types';
 
 const defaultPluginsConfig: ConfigPlugins = {
-  graf: {
+  hermes: {
     auth_token: '',
     enabled: false
   },
-  meravuelta: {
+  talaria: {
     auth_token: '',
     enabled: false
   },
-  fiar: {
+  pistis: {
     auth_token: '',
     enabled: false
   }
@@ -84,49 +84,49 @@ const PluginsConfigView: React.FC = () => {
           <Card.Title>Configuración de Plugins</Card.Title>
           {editMode ? (
             <Form onSubmit={handleSubmit}>
-              {/* Graf */}
+              {/* Hermes (legacy: hermes) */}
               <Form.Group>
-                <Form.Label>Token de Graf</Form.Label>
+                <Form.Label>Token de Hermes</Form.Label>
                 <Form.Control
                   type="text"
-                  value={config.pluginsConfig.graf.auth_token}
-                  onChange={e => handlePluginConfigChange('graf', 'auth_token', e.target.value)}
+                  value={config.pluginsConfig.hermes.auth_token}
+                  onChange={e => handlePluginConfigChange('hermes', 'auth_token', e.target.value)}
                 />
                 <Form.Check
                   type="checkbox"
                   label="Habilitado"
-                  checked={config.pluginsConfig.graf.enabled}
-                  onChange={e => handlePluginConfigChange('graf', 'enabled', e.currentTarget.checked)}
+                  checked={config.pluginsConfig.hermes.enabled}
+                  onChange={e => handlePluginConfigChange('hermes', 'enabled', e.currentTarget.checked)}
                 />
               </Form.Group>
-              {/* MeraVuelta */}
+              {/* Talaria (legacy: talaria) */}
               <Form.Group style={{ marginTop: '1rem' }}>
-                <Form.Label>Token de MeraVuelta</Form.Label>
+                <Form.Label>Token de Talaria</Form.Label>
                 <Form.Control
                   type="text"
-                  value={config.pluginsConfig.meravuelta.auth_token}
-                  onChange={e => handlePluginConfigChange('meravuelta', 'auth_token', e.target.value)}
+                  value={config.pluginsConfig.talaria.auth_token}
+                  onChange={e => handlePluginConfigChange('talaria', 'auth_token', e.target.value)}
                 />
                 <Form.Check
                   type="checkbox"
                   label="Habilitado"
-                  checked={config.pluginsConfig.meravuelta.enabled}
-                  onChange={e => handlePluginConfigChange('meravuelta', 'enabled', e.currentTarget.checked)}
+                  checked={config.pluginsConfig.talaria.enabled}
+                  onChange={e => handlePluginConfigChange('talaria', 'enabled', e.currentTarget.checked)}
                 />
               </Form.Group>
-              {/* Fiar */}
+              {/* Pistis (legacy: pistis) */}
               <Form.Group style={{ marginTop: '1rem' }}>
-                <Form.Label>Token de Fiar</Form.Label>
+                <Form.Label>Token de Pistis</Form.Label>
                 <Form.Control
                   type="text"
-                  value={config.pluginsConfig.fiar.auth_token}
-                  onChange={e => handlePluginConfigChange('fiar', 'auth_token', e.target.value)}
+                  value={config.pluginsConfig.pistis.auth_token}
+                  onChange={e => handlePluginConfigChange('pistis', 'auth_token', e.target.value)}
                 />
                 <Form.Check
                   type="checkbox"
                   label="Habilitado"
-                  checked={config.pluginsConfig.fiar.enabled}
-                  onChange={e => handlePluginConfigChange('fiar', 'enabled', e.currentTarget.checked)}
+                  checked={config.pluginsConfig.pistis.enabled}
+                  onChange={e => handlePluginConfigChange('pistis', 'enabled', e.currentTarget.checked)}
                 />
               </Form.Group>
               <br />
@@ -135,9 +135,9 @@ const PluginsConfigView: React.FC = () => {
             </Form>
           ) : (
             <>
-              <p>Graf: {config.pluginsConfig.graf.enabled ? 'Habilitado' : 'Deshabilitado'}</p>
-              <p>MeraVuelta: {config.pluginsConfig.meravuelta.enabled ? 'Habilitado' : 'Deshabilitado'}</p>
-              <p>Fiar: {config.pluginsConfig.fiar.enabled ? 'Habilitado' : 'Deshabilitado'}</p>
+              <p>Hermes: {config.pluginsConfig.hermes.enabled ? 'Habilitado' : 'Deshabilitado'}</p>
+              <p>Talaria: {config.pluginsConfig.talaria.enabled ? 'Habilitado' : 'Deshabilitado'}</p>
+              <p>Pistis: {config.pluginsConfig.pistis.enabled ? 'Habilitado' : 'Deshabilitado'}</p>
               <Button variant="outline-primary" onClick={handleEditMode}>Editar configuración</Button>
             </>
           )}

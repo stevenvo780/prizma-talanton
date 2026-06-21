@@ -54,9 +54,9 @@ services:
   pos-database:
     image: postgres:15-alpine
     environment:
-      POSTGRES_DB: pos_db
-      POSTGRES_USER: pos_user
-      POSTGRES_PASSWORD: pos_password
+      POSTGRES_DB: talanton
+      POSTGRES_USER: talanton
+      POSTGRES_PASSWORD: talanton
     ports:
       - "5432:5432"
     volumes:

@@ -74,14 +74,14 @@ export class MercadoPagoService {
         {
           params: {
             status: 'active',
-            q: `Sinergia POS ${planType} ${frequency}`,
+            q: `Prizma Talanton POS ${planType} ${frequency}`,
           },
         },
       );
       const existing = searchRes.data.results?.find(
         (p) =>
           p.reason ===
-          `Sinergia POS - Plan ${PLAN_DETAILS[planType].name} (${
+          `Prizma Talanton POS - Plan ${PLAN_DETAILS[planType].name} (${
             frequency === PaymentFrequency.MONTHLY ? 'Mensual' : 'Anual'
           })`,
       );
@@ -110,14 +110,16 @@ export class MercadoPagoService {
       frequency === PaymentFrequency.MONTHLY ? 'Mensual' : 'Anual';
 
     const body = {
-      reason: `Sinergia POS - Plan ${plan.name} (${reasonLabel})`,
+      reason: `Prizma Talanton POS - Plan ${plan.name} (${reasonLabel})`,
       auto_recurring: {
         frequency: freq,
         frequency_type: freqType,
         transaction_amount: amount,
         currency_id: 'COP',
       },
-      back_url: process.env.MP_BACK_URL || 'https://sinergia-pos.com/subscribe',
+      back_url:
+        process.env.MP_BACK_URL ||
+        'https://prizma-talanton-578238159459.us-central1.run.app/subscribe',
     };
 
     try {
@@ -180,7 +182,7 @@ export class MercadoPagoService {
       data.frequency === PaymentFrequency.MONTHLY ? 'Mensual' : 'Anual';
 
     const body: Record<string, any> = {
-      reason: `Sinergia POS - Plan ${plan.name} (${reasonLabel})`,
+      reason: `Prizma Talanton POS - Plan ${plan.name} (${reasonLabel})`,
       auto_recurring: {
         frequency: freq,
         frequency_type: freqType,
@@ -189,7 +191,9 @@ export class MercadoPagoService {
       },
       payer_email: data.email,
       external_reference: `${data.userId}|${data.planType}|${data.frequency}`,
-      back_url: process.env.MP_BACK_URL || 'https://sinergia-pos.com/subscribe',
+      back_url:
+        process.env.MP_BACK_URL ||
+        'https://prizma-talanton-578238159459.us-central1.run.app/subscribe',
       status: 'pending',
     };
 
@@ -464,6 +468,85 @@ export class MercadoPagoService {
       preapproval.id,
       preapproval.status,
     );
+  }
+
+  /**
+   * Procesa eventos de pago/suscripción recibidos desde el Hub Central (Nous)
+   * vía `POST /api/webhooks/payments` (ver `PaymentsWebhookController`). El Hub
+   * ya verificó la firma MP y agrupó los eventos por externalReference; este
+   * controller ya validó la firma HMAC con `prizma-contracts.verifySignature`.
+   *
+   * `externalReference` codifica `${userId}|${planType}|${frequency}` (mismo
+   * formato usado al crear la suscripción en `createSubscription`). El
+   * `prizma-hub.service` solo emite eventos salientes; este método implementa
+   * la lógica de aplicación para los eventos entrantes.
+   */
+  async handleHubPaymentEvent(
+    eventType: string,
+    body: Record<string, any>,
+  ): Promise<{ processed: boolean; action: string }> {
+    this.logger.log(
+      `Hub payment event: eventType=${eventType}` +
+        ` externalRef=${body?.externalReference ?? 'none'}` +
+        ` paymentRef=${body?.paymentRef ?? '-'}` +
+        ` subRef=${body?.subRef ?? '-'}`,
+    );
+
+    const externalReference = body?.externalReference as string | undefined;
+    if (!externalReference) {
+      this.logger.warn('Hub payment event sin externalReference — ignorado');
+      return { processed: false, action: 'external_reference_missing' };
+    }
+
+    const [userId, planType, frequency] = externalReference.split('|');
+    if (!userId || !planType || !frequency) {
+      this.logger.warn(
+        `Hub payment event: externalReference inválido: ${externalReference}`,
+      );
+      return { processed: false, action: 'external_reference_invalid' };
+    }
+
+    const user = await this.userService.findOne(userId);
+    if (!user) {
+      this.logger.warn(
+        `Hub payment event: usuario ${userId} no encontrado — ignorado`,
+      );
+      return { processed: false, action: 'user_not_found' };
+    }
+
+    switch (eventType) {
+      case 'pago.aprobado':
+      case 'suscripcion.activada': {
+        const mpPreapprovalId =
+          (body?.mpPreapprovalId as string) ||
+          (body?.mpPaymentId as string) ||
+          `hub-${eventType}-${Date.now()}`;
+        await this.saveLocalSubscription(
+          user,
+          planType as PlanType,
+          frequency as PaymentFrequency,
+          mpPreapprovalId,
+          'authorized',
+        );
+        return { processed: true, action: `activated_${eventType}` };
+      }
+      case 'pago.rechazado': {
+        this.logger.warn(
+          `Hub payment event: pago rechazado para usuario ${userId}` +
+            ` motivo=${body?.motivo ?? 'no_especificado'}`,
+        );
+        return { processed: true, action: 'payment_rejected_logged' };
+      }
+      case 'suscripcion.cancelada': {
+        await this.cancelSubscription(userId);
+        return { processed: true, action: 'subscription_cancelled' };
+      }
+      default:
+        this.logger.warn(
+          `Hub payment event: eventType no manejado: ${eventType}`,
+        );
+        return { processed: false, action: 'unknown_event_type' };
+    }
   }
 
   // ─────────────────────────────────────────────

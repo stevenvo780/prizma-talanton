@@ -83,14 +83,14 @@ const Header: React.FC = () => {
 
           <Navbar.Brand as={Link} to="/" className="me-auto text-dark d-flex align-items-center">
             <img
-              src={`${process.env.PUBLIC_URL}/cauce-symbol.svg`}
-              alt="Olympo"
+              src={`${process.env.PUBLIC_URL}/prizma-symbol.svg`}
+              alt="Prizma"
               width={28}
               height={28}
               className="me-2"
               style={{ borderRadius: 8 }}
             />
-            Sinergia
+            Talanton
           </Navbar.Brand>
 
           <div className="d-flex align-items-center ms-auto">

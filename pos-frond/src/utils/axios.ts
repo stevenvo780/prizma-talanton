@@ -2,7 +2,7 @@ import axios from 'axios';
 import store from '../redux/store';
 import { loading } from '../redux/ui';
 const api = axios.create({
-  baseURL: process.env.REACT_APP_API_URL,
+  baseURL: process.env.REACT_APP_API_URL || 'https://prizma-talanton-kjopuery2a-uc.a.run.app',
 });
 
 let calls = 0;
@@ -17,8 +17,6 @@ api.interceptors.request.use(function (config) {
   store.dispatch(loading(true));
   return config;
 }, function (error) {
-  calls++;
-  store.dispatch(loading(true));
   console.error(error);
   return Promise.reject(error);
 });

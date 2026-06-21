@@ -38,7 +38,7 @@ describe('AppController', () => {
   describe('root', () => {
     it('should return welcome message', () => {
       expect(appController.getHello()).toBe(
-        'Bienvenido a humanizar, puedes ver la documentación en /api',
+        'Bienvenido a prizma, puedes ver la documentación en /api',
       );
     });
   });

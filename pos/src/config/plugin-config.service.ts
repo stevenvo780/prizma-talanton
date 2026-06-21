@@ -127,9 +127,9 @@ export class PluginConfigService {
     // This method can be used as fallback when plugin orchestration service is unavailable
     // It should read from the existing config.entity.ts pluginsConfig field
     return {
-      fiar: { enabled: false, auth_token: '' },
-      meravuelta: { enabled: false, auth_token: '' },
-      graf: { enabled: false, auth_token: '' },
+      pistis: { enabled: false, auth_token: '' },
+      talaria: { enabled: false, auth_token: '' },
+      hermes: { enabled: false, auth_token: '' },
     };
   }
 

@@ -7,7 +7,7 @@ import { Repository } from 'typeorm';
 import { ConfigService } from '../config/config.service';
 
 @Injectable()
-export class MeraVueltaService {
+export class TalariaService {
   constructor(
     @InjectRepository(User)
     private userRepository: Repository<User>,
@@ -28,34 +28,34 @@ export class MeraVueltaService {
 
     const user = invoice.user;
     const config = await this.configService.get(user.id);
-    if (!config?.pluginsConfig?.meravuelta?.enabled) {
+    if (!config?.pluginsConfig?.talaria?.enabled) {
       return;
     }
 
     const meraVueltaUrl =
-      process.env.MERAVUELTA_API_URL || 'http://localhost:3006/api';
+      process.env.TALARIA_API_URL || 'http://localhost:3006/api';
     const endpoint = `${meraVueltaUrl}/order`;
     try {
       const invoiceData = this.transformInvoiceToInvoiceData(invoice);
       const response = await axios.post(endpoint, invoiceData, {
         headers: {
           Authorization:
-            user.profile.pluginsConfig.meravuelta.auth_token_meravuelta,
+            user.profile.pluginsConfig.talaria.auth_token_talaria,
           'x-tenant-id': String(user.id),
         },
       });
       return response.data;
     } catch (error) {
       console.error(
-        'Error al crear el pedido en MeraVuelta:',
+        'Error al crear el pedido en Talaria:',
         error.response.status,
       );
       if (process.env.NODE_ENV !== 'production') {
-        console.warn('Using mock response for MeraVuelta in development');
+        console.warn('Using mock response for Talaria in development');
         return { orderId: `mock-${invoiceId}`, status: 'success' };
       }
       throw new HttpException(
-        'Error communicating with MeraVuelta API',
+        'Error communicating with Talaria API',
         HttpStatus.SERVICE_UNAVAILABLE,
       );
     }

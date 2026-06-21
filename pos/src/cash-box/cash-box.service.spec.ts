@@ -190,7 +190,7 @@ describe('CashBoxService', () => {
         return cashBox; // Retorna el mismo objeto que fue modificado
       });
 
-      const result = await service.cashIn(cashBoxId, amount);
+      const result = await service.cashIn(cashBoxId, amount, mockUser.id);
 
       expect(mockCashBoxRepository.findOne).toHaveBeenCalledWith({
         where: { id: cashBoxId },
@@ -222,7 +222,7 @@ describe('CashBoxService', () => {
         return cashBox; // Retorna el mismo objeto que fue modificado
       });
 
-      const result = await service.cashOut(cashBoxId, amount);
+      const result = await service.cashOut(cashBoxId, amount, mockUser.id);
 
       expect(mockCashBoxRepository.findOne).toHaveBeenCalledWith({
         where: { id: cashBoxId },
@@ -247,7 +247,7 @@ describe('CashBoxService', () => {
 
       mockCashBoxRepository.findOne.mockResolvedValue(mutableCashBox);
 
-      await expect(service.cashOut(cashBoxId, amount)).rejects.toThrow(
+      await expect(service.cashOut(cashBoxId, amount, mockUser.id)).rejects.toThrow(
         'Insufficient balance in the cash box',
       );
 
@@ -264,7 +264,7 @@ describe('CashBoxService', () => {
       mockCashBoxRepository.findOne.mockResolvedValue(mockCashBox);
       mockCashBoxRepository.save.mockResolvedValue(adjustedCashBox);
 
-      const result = await service.adjustBalance(cashBoxId, newBalance);
+      const result = await service.adjustBalance(cashBoxId, newBalance, mockUser.id);
 
       expect(mockCashBoxRepository.findOne).toHaveBeenCalledWith({ where: { id: cashBoxId } });
       expect(mockCashBoxRepository.save).toHaveBeenCalled();
@@ -273,7 +273,7 @@ describe('CashBoxService', () => {
 
     it('should throw when cash box not found on adjustBalance', async () => {
       mockCashBoxRepository.findOne.mockResolvedValue(null);
-      await expect(service.adjustBalance(999, 500)).rejects.toThrow('Cash box not found');
+      await expect(service.adjustBalance(999, 500, mockUser.id)).rejects.toThrow('Cash box not found');
     });
   });
 
@@ -283,7 +283,7 @@ describe('CashBoxService', () => {
       mockCashBoxRepository.findOne.mockResolvedValue(mutableCashBox);
       mockCashBoxRepository.save.mockImplementation(async (cb) => cb);
 
-      const result = await service.cashIn('Caja Norte', 200);
+      const result = await service.cashIn('Caja Norte', 200, mockUser.id);
 
       expect(mockCashBoxRepository.findOne).toHaveBeenCalledWith({ where: { name: 'Caja Norte' } });
       expect(result.cashIn).toBe(200);
@@ -296,7 +296,7 @@ describe('CashBoxService', () => {
       mockCashBoxRepository.create.mockReturnValue(newBox);
       mockCashBoxRepository.save.mockImplementation(async (cb) => ({ ...cb }));
 
-      const result = await service.cashIn('Nueva', 100);
+      const result = await service.cashIn('Nueva', 100, mockUser.id);
 
       expect(mockCashBoxRepository.create).toHaveBeenCalled();
       expect(result.cashIn).toBe(100);
@@ -306,7 +306,7 @@ describe('CashBoxService', () => {
   describe('cashOut edge cases', () => {
     it('should throw when cash box not found on cashOut', async () => {
       mockCashBoxRepository.findOne.mockResolvedValue(null);
-      await expect(service.cashOut(999, 100)).rejects.toThrow('Cash box not found');
+      await expect(service.cashOut(999, 100, mockUser.id)).rejects.toThrow('Cash box not found');
     });
 
     it('should allow cashOut with exact balance amount', async () => {
@@ -314,7 +314,7 @@ describe('CashBoxService', () => {
       mockCashBoxRepository.findOne.mockResolvedValue(exactBox);
       mockCashBoxRepository.save.mockImplementation(async (cb) => cb);
 
-      const result = await service.cashOut(1, 500);
+      const result = await service.cashOut(1, 500, mockUser.id);
       expect(result.balance).toBe(0);
     });
   });

@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { MeraVueltaService } from './meravuelta.service';
+import { TalariaService } from './talaria.service';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { User } from '../user/entities/user.entity';
 import {
@@ -14,8 +14,8 @@ import axios from 'axios';
 jest.mock('axios');
 const mockedAxios = axios as jest.Mocked<typeof axios>;
 
-describe('MeraVueltaService', () => {
-  let service: MeraVueltaService;
+describe('TalariaService', () => {
+  let service: TalariaService;
 
   const mockUserRepository = {
     find: jest.fn(),
@@ -38,14 +38,14 @@ describe('MeraVueltaService', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
-        MeraVueltaService,
+        TalariaService,
         { provide: getRepositoryToken(User), useValue: mockUserRepository },
         { provide: getRepositoryToken(Invoice), useValue: mockInvoiceRepository },
         { provide: ConfigService, useValue: mockConfigService },
       ],
     }).compile();
 
-    service = module.get<MeraVueltaService>(MeraVueltaService);
+    service = module.get<TalariaService>(TalariaService);
   });
 
   afterEach(() => {
@@ -81,7 +81,7 @@ describe('MeraVueltaService', () => {
             user: null,
             pluginsConfig: {
               total_pedido: { auth_token_total_pedido: '', enabled: false },
-              meravuelta: { auth_token_meravuelta: 'test-key', enabled: true },
+              talaria: { auth_token_talaria: 'test-key', enabled: true },
             },
             nit: null,
             dianConfig: null,
@@ -110,7 +110,7 @@ describe('MeraVueltaService', () => {
 
       mockInvoiceRepository.findOne.mockResolvedValue(mockInvoice);
       mockConfigService.get.mockResolvedValue({
-        pluginsConfig: { meravuelta: { enabled: true, auth_token: 'tok' } },
+        pluginsConfig: { talaria: { enabled: true, auth_token: 'tok' } },
       });
       mockedAxios.post.mockResolvedValue({ data: { success: true, transactionId: 'TXN123' } });
 
@@ -128,7 +128,7 @@ describe('MeraVueltaService', () => {
       await expect(service.createInvoiceFromInvoice(1)).rejects.toThrow('Pedido no encontrado');
     });
 
-    it('should return undefined when meravuelta plugin is disabled', async () => {
+    it('should return undefined when talaria plugin is disabled', async () => {
       const invoiceWithDisabledPlugin: Partial<Invoice> = {
         id: 2,
         user: {
@@ -146,7 +146,7 @@ describe('MeraVueltaService', () => {
 
       mockInvoiceRepository.findOne.mockResolvedValue(invoiceWithDisabledPlugin);
       mockConfigService.get.mockResolvedValue({
-        pluginsConfig: { meravuelta: { enabled: false, auth_token: '' } },
+        pluginsConfig: { talaria: { enabled: false, auth_token: '' } },
       });
 
       const result = await service.createInvoiceFromInvoice(2);

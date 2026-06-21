@@ -64,8 +64,12 @@ export class CashBoxController {
   @ApiOkResponse({ description: 'The cash box has been successfully updated.' })
   @ApiNotFoundResponse({ description: 'Cash box not found.' })
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCashBoxDto: UpdateCashBoxDto) {
-    return this.cashBoxService.update(+id, updateCashBoxDto);
+  update(
+    @Request() req: RequestWithUser,
+    @Param('id') id: string,
+    @Body() updateCashBoxDto: UpdateCashBoxDto,
+  ) {
+    return this.cashBoxService.update(+id, updateCashBoxDto, req.user.id);
   }
 
   @ApiOperation({ summary: 'Delete a cash box by ID' })
@@ -80,29 +84,32 @@ export class CashBoxController {
   @ApiOkResponse({ description: 'Se añadió efectivo a la caja.' })
   @Put(':identifier/cash-in/:amount')
   cashIn(
+    @Request() req: RequestWithUser,
     @Param('identifier') identifier: string,
     @Param('amount', ParseFloatPipe) amount: number,
   ) {
-    return this.cashBoxService.cashIn(identifier, amount);
+    return this.cashBoxService.cashIn(identifier, amount, req.user.id);
   }
 
   @ApiOperation({ summary: 'Cash out from the cash box' })
   @ApiOkResponse({ description: 'Se dedujo efectivo de la caja.' })
   @Put(':identifier/cash-out/:amount')
   cashOut(
+    @Request() req: RequestWithUser,
     @Param('identifier') identifier: string,
     @Param('amount', ParseFloatPipe) amount: number,
   ) {
-    return this.cashBoxService.cashOut(identifier, amount);
+    return this.cashBoxService.cashOut(identifier, amount, req.user.id);
   }
 
   @ApiOperation({ summary: 'Adjust the balance of the cash box' })
   @ApiOkResponse({ description: 'Se ajustó el saldo de la caja.' })
   @Put(':identifier/adjust-balance/:newBalance')
   adjustBalance(
+    @Request() req: RequestWithUser,
     @Param('identifier') identifier: string,
     @Param('newBalance', ParseFloatPipe) newBalance: number,
   ) {
-    return this.cashBoxService.adjustBalance(identifier, newBalance);
+    return this.cashBoxService.adjustBalance(identifier, newBalance, req.user.id);
   }
 }

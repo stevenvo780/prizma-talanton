@@ -13,13 +13,13 @@ export class CashBox {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ type: 'float' })
+  @Column({ type: 'numeric', precision: 12, scale: 2 })
   cashIn: number;
 
-  @Column({ type: 'float' })
+  @Column({ type: 'numeric', precision: 12, scale: 2 })
   cashOut: number;
 
-  @Column({ type: 'float' })
+  @Column({ type: 'numeric', precision: 12, scale: 2 })
   balance: number;
 
   @ManyToOne(() => User, (user) => user.cashBoxes)

@@ -55,6 +55,12 @@ export class Product {
   @Index()
   user: User;
 
+  @Column({ type: 'int', default: 0 })
+  stock: number;
+
+  @Column({ type: 'int', default: 0, nullable: true })
+  minStock?: number;
+
   @Column({ default: false })
   state: boolean;
 }

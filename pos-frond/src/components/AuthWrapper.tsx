@@ -12,6 +12,7 @@ import Register from '../views/Register';
 import Settings from '../views/Settings';
 import EditProfile from '../views/Profile';
 import Suscribe from '../views/Subscribe';
+import Dashboard from '../views/Dashboard';
 import { useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
 import api from '../utils/axios';
@@ -34,8 +35,8 @@ const AuthWrapper: React.FC = () => {
       const hasCashBox = Array.isArray(boxes) && boxes.length > 0;
       setOnboardingDone(!!(hasProfile && hasCashBox));
     } catch {
-      // Si hay error, dejamos pasar al app normal
-      setOnboardingDone(true);
+      // Si hay error, forzar el wizard de onboarding
+      setOnboardingDone(false);
     }
   }, [user?.id]);
 
@@ -89,6 +90,8 @@ const AuthWrapper: React.FC = () => {
             <Route path="/" element={<Navigate to="/pos" />} />
             <Route path="/invoices" element={<Invoice />} />
             <Route path="/subscribe" element={<Suscribe />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </div>
       </Layout>

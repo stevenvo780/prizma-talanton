@@ -24,14 +24,14 @@ import { MercadoPagoModule } from './mercadopago/mercadopago.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import AppProvider from './app.provider';
 import { IntegrationsController } from './integrations/integrations.controller';
-import { OlympoModule } from './cauce/cauce.module';
+import { PrizmaModule } from './prizma/prizma.module';
 import { User } from './user/entities/user.entity';
 import { Profile } from './profile/entities/profile.entity';
 
 @Module({
   imports: [
     ConfigModule.forRoot(),
-    OlympoModule,
+    PrizmaModule,
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: process.env.DB_HOST,
@@ -40,7 +40,7 @@ import { Profile } from './profile/entities/profile.entity';
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
-      synchronize: true,
+      synchronize: process.env.NODE_ENV !== 'PROD',
       ssl:
         process.env.NODE_ENV === 'PROD' ? { rejectUnauthorized: false } : false,
     }),

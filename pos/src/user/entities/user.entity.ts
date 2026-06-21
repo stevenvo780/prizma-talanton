@@ -13,8 +13,8 @@ export interface ConfigPlugins {
     auth_token_total_pedido: string;
     enabled: boolean;
   };
-  meravuelta: {
-    auth_token_meravuelta: string;
+  talaria: {
+    auth_token_talaria: string;
     enabled: boolean;
   };
 }

@@ -1,6 +1,6 @@
-# Sinergia POS Frontend
+# Talanton POS Frontend
 
-Frontend React del sistema de punto de venta Sinergia POS.
+Frontend React del sistema de punto de venta Talanton POS.
 
 ## Stack
 
@@ -45,14 +45,14 @@ El build se genera en `build/` y se sirve con Nginx en Docker.
 ## Docker
 
 ```bash
-docker build -t sinergia-pos-frond .
-docker run -p 4002:80 sinergia-pos-frond
+docker build -t talanton-pos-frond .
+docker run -p 4002:80 talanton-pos-frond
 ```
 
-O con el docker-compose raiz de Sinergia:
+O con el docker-compose raiz de Talanton:
 
 ```bash
-cd /ruta/a/Sinergia
+cd /ruta/a/Talanton
 docker compose up pos-frontend -d
 ```
 
@@ -87,6 +87,6 @@ src/views/
 
 ## Proyectos relacionados
 
-- **Backend**: `Sinergia/pos` (NestJS, puerto 3000)
-- **Robot**: `Sinergia/robotPos` (Express, puerto 3005)
-- **Orquestacion**: `Sinergia/docker-compose.yml`
+- **Backend**: `Talanton/pos` (NestJS, puerto 3000)
+- **Robot**: `Talanton/robotPos` (Express, puerto 3005)
+- **Orquestacion**: `Talanton/docker-compose.yml`

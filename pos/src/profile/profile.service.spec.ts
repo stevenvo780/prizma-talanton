@@ -82,7 +82,7 @@ describe('ProfileService', () => {
         user: mockUser,
         pluginsConfig: {
           total_pedido: { auth_token_total_pedido: '', enabled: false },
-          meravuelta: { auth_token_meravuelta: '', enabled: false },
+          talaria: { auth_token_talaria: '', enabled: false },
         },
       } as unknown as Profile;
 

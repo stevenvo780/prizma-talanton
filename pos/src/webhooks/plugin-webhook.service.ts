@@ -62,26 +62,26 @@ export class PluginWebhookService {
     console.log(`Plugin ${pluginId} processed event successfully`);
 
     switch (pluginId) {
-      case 'fiar':
+      case 'pistis':
         if (response.data?.creditTransaction) {
           console.log(
-            `FIAR credit transaction created:`,
+            `PISTIS credit transaction created:`,
             response.data.creditTransaction,
           );
-          // Update invoice with FIAR transaction reference if needed
+          // Update invoice with PISTIS transaction reference if needed
           if (response.data.originalInvoice?.id) {
             await this.updateInvoiceWithPluginData(
               response.data.originalInvoice.id,
-              { fiarTransactionId: response.data.creditTransaction.id },
+              { pistisTransactionId: response.data.creditTransaction.id },
             );
           }
         }
         break;
 
-      case 'meravuelta':
+      case 'talaria':
         if (response.data?.deliveryOrder) {
           console.log(
-            `MeraVuelta delivery order created:`,
+            `Talaria delivery order created:`,
             response.data.deliveryOrder,
           );
           // Update invoice with delivery order reference
@@ -94,9 +94,9 @@ export class PluginWebhookService {
         }
         break;
 
-      case 'graf':
+      case 'hermes':
         if (response.data?.orderStatus) {
-          console.log(`Graf order status updated:`, response.data.orderStatus);
+          console.log(`Hermes order status updated:`, response.data.orderStatus);
         }
         break;
 

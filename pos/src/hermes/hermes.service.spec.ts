@@ -1,10 +1,10 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { GrafService, GrafOrderStatusType } from './graf.service';
+import { HermesService, HermesOrderStatusType } from './hermes.service';
 import { HttpService } from '@nestjs/axios';
 import { of } from 'rxjs';
 
-describe('GrafService', () => {
-  let service: GrafService;
+describe('HermesService', () => {
+  let service: HermesService;
   let http: jest.Mocked<HttpService>;
 
   beforeEach(async () => {
@@ -12,9 +12,9 @@ describe('GrafService', () => {
       patch: jest.fn().mockReturnValue(of({ data: { ok: true } })),
     } as any;
     const module: TestingModule = await Test.createTestingModule({
-      providers: [GrafService, { provide: HttpService, useValue: http }],
+      providers: [HermesService, { provide: HttpService, useValue: http }],
     }).compile();
-    service = module.get<GrafService>(GrafService);
+    service = module.get<HermesService>(HermesService);
   });
 
   it('should be defined', () => {
@@ -24,7 +24,7 @@ describe('GrafService', () => {
   it('should update order status', async () => {
     await service.updateOrderStatusFromInvoice(
       { tracking_number: 1 } as any,
-      GrafOrderStatusType.PAID,
+      HermesOrderStatusType.PAID,
       'token',
     );
     expect(http.patch).toHaveBeenCalled();

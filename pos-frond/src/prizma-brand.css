@@ -1,17 +1,17 @@
 /*
- * cauce-brand.css — Mapea la marca de Bootstrap / estilos globales de
- * Sinergia POS a los tokens del design system Olympo (módulo "sinergia").
+ * prizma-brand.css — Mapea la marca de Bootstrap / estilos globales de
+ * Talanton POS a los tokens del design system Prizma (módulo "talanton").
  *
  * Aditivo: se importa DESPUÉS de bootstrap e index.css en src/index.tsx,
  * por lo que ajusta el acento sin reescribir los estilos existentes.
- * El acento del módulo proviene de [data-module="sinergia"] (indigo #6366F1)
- * definido por @olympo/ui/styles.css.
+ * El acento del módulo proviene de [data-module="talanton"] (indigo #6366F1)
+ * definido por prizma-ui/styles.css.
  */
 
-/* ---- Variables de Bootstrap remapeadas a tokens Olympo ---- */
+/* ---- Variables de Bootstrap remapeadas a tokens Prizma ---- */
 :root {
   --bs-primary: var(--c-accent-module);
-  --bs-primary-rgb: 99, 102, 241; /* #6366F1 → acento módulo sinergia */
+  --bs-primary-rgb: 99, 102, 241; /* #6366F1 → acento módulo talanton */
   --bs-link-color: var(--c-primary);
   --bs-link-hover-color: var(--c-primary-hover);
   --bs-body-font-family: var(--c-font-sans);
@@ -20,7 +20,7 @@
   --bs-border-radius-lg: var(--c-radius-lg);
 }
 
-/* ---- Tipografía global ---- */
+/* ---- Tipohermesía global ---- */
 body {
   font-family: var(--c-font-sans);
 }
@@ -33,16 +33,16 @@ a:hover {
   color: var(--c-primary-hover);
 }
 
-/* ---- Encabezados con la fuente display de Olympo ---- */
+/* ---- Encabezados con la fuente display de Prizma ---- */
 h1, h2, h3, h4, h5, h6,
 .h1, .h2, .h3, .h4, .h5, .h6 {
   font-family: var(--c-font-display, var(--c-font-sans));
 }
 
 /*
- * ---- Botón primario adopta el acento del módulo "sinergia" ----
+ * ---- Botón primario adopta el acento del módulo "talanton" ----
  * index.css define .btn-primary con var(--primary-color) (amarillo);
- * lo reapuntamos al acento de Olympo. Mismo selector → gana por orden
+ * lo reapuntamos al acento de Prizma. Mismo selector → gana por orden
  * de cascada al importarse después.
  */
 .btn-primary {

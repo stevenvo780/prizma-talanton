@@ -8,15 +8,15 @@ import {
 import { User } from '../../user/entities/user.entity';
 
 export interface ConfigPlugins {
-  graf: {
+  hermes: {
     auth_token: '';
     enabled: boolean;
   };
-  meravuelta: {
+  talaria: {
     auth_token: '';
     enabled: boolean;
   };
-  fiar: {
+  pistis: {
     auth_token: '';
     enabled: boolean;
   };
@@ -39,15 +39,15 @@ export class Config {
   @Column('json', {
     nullable: true,
     default: {
-      graf: {
+      hermes: {
         auth_token: '',
         enabled: false,
       },
-      meravuelta: {
+      talaria: {
         auth_token: '',
         enabled: false,
       },
-      fiar: {
+      pistis: {
         auth_token: '',
         enabled: false,
       },

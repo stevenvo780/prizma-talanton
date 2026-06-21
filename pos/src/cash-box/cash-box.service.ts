@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CashBox } from './entities/cash-box.entity';
@@ -40,10 +40,14 @@ export class CashBoxService {
     });
   }
 
-  async update(id: number, updateCashBoxDto: UpdateCashBoxDto) {
+  async update(id: number, updateCashBoxDto: UpdateCashBoxDto, userId?: string) {
+    const where = userId ? { id, user: { id: userId } } : { id };
     const updatedCashBox = await this.cashBoxRepository.findOne({
-      where: { id },
+      where,
     });
+    if (!updatedCashBox) {
+      throw new NotFoundException('Cash box not found');
+    }
     Object.assign(updatedCashBox, updateCashBoxDto);
     return this.cashBoxRepository.save(updatedCashBox);
   }
@@ -52,23 +56,15 @@ export class CashBoxService {
     return this.cashBoxRepository.delete(id);
   }
 
-  async cashIn(identifier: number | string, amount: number) {
+  async cashIn(identifier: number | string, amount: number, userId: string) {
     const isNumeric = !isNaN(+identifier as any);
     const where = isNumeric
-      ? { id: +identifier }
-      : { name: identifier as string };
+      ? { id: +identifier, user: { id: userId } }
+      : { name: identifier as string, user: { id: userId } };
 
     let cashBox = await this.cashBoxRepository.findOne({ where });
     if (!cashBox) {
-      const data: Partial<CashBox> = {
-        cashIn: 0,
-        cashOut: 0,
-        balance: 0,
-        user: null,
-        ...(!isNumeric ? { name: identifier as string } : {}),
-      };
-      cashBox = this.cashBoxRepository.create(data);
-      cashBox = await this.cashBoxRepository.save(cashBox);
+      throw new NotFoundException('Cash box not found or does not belong to user');
     }
 
     cashBox.cashIn += amount;
@@ -76,30 +72,35 @@ export class CashBoxService {
     return this.cashBoxRepository.save(cashBox);
   }
 
-  async cashOut(identifier: number | string, amount: number) {
+  async cashOut(identifier: number | string, amount: number, userId: string) {
     const isNumeric = !isNaN(+identifier as any);
     const where = isNumeric
-      ? { id: +identifier }
-      : { name: identifier as string };
+      ? { id: +identifier, user: { id: userId } }
+      : { name: identifier as string, user: { id: userId } };
 
     const cashBox = await this.cashBoxRepository.findOne({ where });
-    if (!cashBox) throw new Error('Cash box not found');
-    if (cashBox.balance < amount)
-      throw new Error('Insufficient balance in the cash box');
+    if (!cashBox) {
+      throw new NotFoundException('Cash box not found or does not belong to user');
+    }
+    if (cashBox.balance < amount) {
+      throw new NotFoundException('Insufficient balance in the cash box');
+    }
 
     cashBox.cashOut += amount;
     cashBox.balance -= amount;
     return this.cashBoxRepository.save(cashBox);
   }
 
-  async adjustBalance(identifier: number | string, newBalance: number) {
+  async adjustBalance(identifier: number | string, newBalance: number, userId: string) {
     const isNumeric = !isNaN(+identifier as any);
     const where = isNumeric
-      ? { id: +identifier }
-      : { name: identifier as string };
+      ? { id: +identifier, user: { id: userId } }
+      : { name: identifier as string, user: { id: userId } };
 
     const cashBox = await this.cashBoxRepository.findOne({ where });
-    if (!cashBox) throw new Error('Cash box not found');
+    if (!cashBox) {
+      throw new NotFoundException('Cash box not found or does not belong to user');
+    }
 
     cashBox.balance = newBalance;
     return this.cashBoxRepository.save(cashBox);

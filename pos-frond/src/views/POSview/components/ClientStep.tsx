@@ -5,6 +5,11 @@ import { X, ArrowRight } from 'react-bootstrap-icons';
 import { Container, Row, Col, Card, Form, Button, Modal } from 'react-bootstrap';
 import { Client, TypeDocument } from '../../../utils/types';
 
+interface ClientOption {
+  value: Client;
+  label: string;
+}
+
 interface ClientStepProps {
   client: Client | undefined;
   setClient: (client: Client | undefined) => void;
@@ -46,7 +51,7 @@ const ClientStep: React.FC<ClientStepProps> = ({ client, setClient, onSaveClient
   };
 
   // Cargar lista de clientes al montar el componente
-  const [clientOptions, setClientOptions] = useState<any[]>([]);
+  const [clientOptions, setClientOptions] = useState<ClientOption[]>([]);
 
   useEffect(() => {
     api.get('/client')

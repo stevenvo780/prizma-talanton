@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 import { Container, Row, Col, Button } from 'react-bootstrap';
+import { MultiValue, ActionMeta } from 'react-select';
 import Stepper from './components/Stepper';
 import api from '../../utils/axios';
 import { storage } from '../../utils/firebase';
@@ -84,23 +85,24 @@ const POSView: React.FC = () => {
       invoiceType: string;
     };
   }>(() => {
-    const saved = localStorage.getItem(POS_STEP_SNAPSHOTS_KEY);
-    if (saved) {
-      try {
-        return JSON.parse(saved);
-      } catch {
-        return {
-          1: { client: undefined },
-          2: { selectedProducts: [], quantities: {}, selectPriceType: undefined },
-          3: { paymentType: PaymentType.CashOnDelivery, paymentStatus: PaymentStatus.Unpaid, selectedPaymentMethod: 'Efectivo', invoiceType: '' },
-        };
-      }
-    }
-    return {
+    const defaultSnapshots = {
       1: { client: undefined },
       2: { selectedProducts: [], quantities: {}, selectPriceType: undefined },
       3: { paymentType: PaymentType.CashOnDelivery, paymentStatus: PaymentStatus.Unpaid, selectedPaymentMethod: 'Efectivo', invoiceType: '' },
     };
+    const saved = localStorage.getItem(POS_STEP_SNAPSHOTS_KEY);
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        if (parsed && parsed[1] && parsed[2] && parsed[3]) {
+          return parsed;
+        }
+        return defaultSnapshots;
+      } catch {
+        return defaultSnapshots;
+      }
+    }
+    return defaultSnapshots;
   });
 
   useEffect(() => {
@@ -301,14 +303,20 @@ const POSView: React.FC = () => {
       setCashBoxAction('');
       dispatch(addNotification({ message: 'Acción de caja realizada correctamente', color: 'success' }));
       fetchCashBoxes();
-    } catch (error: any) {
-      dispatch(addNotification({ message: error?.response?.data?.message || 'Error al realizar acción de caja', color: 'danger' }));
+    } catch (error) {
+      const err = error as { response?: { data?: { message?: string } } };
+      dispatch(addNotification({ message: err?.response?.data?.message || 'Error al realizar acción de caja', color: 'danger' }));
     }
   };
 
-  const handlePrintReceipt = (data: any) => {
+  const handlePrintReceipt = (data: { client: Client | undefined; items: Array<any>; totals: any; company: any; date: string }) => {
     const printWindow = window.open('', '_blank', 'width=600,height=800');
     if (!printWindow) return;
+    // Receipt expects client to be Client (not undefined), so provide default fallback
+    const receiptDataForPrint = {
+      ...data,
+      client: data.client || { name: 'Cliente Mostrador' } as Client,
+    };
     printWindow.document.write(`
       <!DOCTYPE html><html><head><title>Recibo POS</title>
       <style>
@@ -318,7 +326,7 @@ const POSView: React.FC = () => {
         th,td{border:1px solid#000;padding:4px;text-align:left;}
         .totales td{border:none;text-align:right;padding-right:0;}
       </style></head>
-      <body>${Receipt(printWindow, data)}</body></html>
+      <body>${Receipt(printWindow, receiptDataForPrint as any)}</body></html>
     `);
     printWindow.document.close();
     printWindow.focus();
@@ -530,6 +538,18 @@ const POSView: React.FC = () => {
 
   const addProductToCart = (productToAdd: Product, priceTypeSelected: ProductPriceType) => {
     const productKey = `${productToAdd.id}-${priceTypeSelected.id}`;
+    const currentQty = quantities[productKey] || 0;
+    const availableStock = priceTypeSelected.availableStock || productToAdd.stock || 0;
+
+    // Validación de stock: no permitir agregar más cantidad que el stock disponible
+    if (currentQty >= availableStock) {
+      dispatch(addNotification({
+        message: `Stock insuficiente para ${productToAdd.name}. Disponible: ${availableStock}`,
+        color: 'warning'
+      }));
+      return;
+    }
+
     const exists = selectedProducts.some(p =>
       p.product.id === productToAdd.id &&
       p.selectPriceType.id === priceTypeSelected.id
@@ -556,9 +576,27 @@ const POSView: React.FC = () => {
     });
   };
 
-  const handleQuantityChange = (productKey: string, event: any) => {
+  const handleQuantityChange = (productKey: string, event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     let quantityValue = parseInt(event.target.value, 10);
     if (isNaN(quantityValue) || quantityValue < 1) quantityValue = 1;
+
+    // Buscar el producto para validar stock disponible
+    const [productId, priceTypeId] = productKey.split('-').map(Number);
+    const selectedProduct = selectedProducts.find(
+      p => p.product.id === productId && p.selectPriceType.id === priceTypeId
+    );
+
+    if (selectedProduct) {
+      const availableStock = selectedProduct.selectPriceType.availableStock || selectedProduct.product.stock || 0;
+      if (quantityValue > availableStock) {
+        dispatch(addNotification({
+          message: `Stock insuficiente. Máximo disponible: ${availableStock}`,
+          color: 'warning'
+        }));
+        quantityValue = availableStock;
+      }
+    }
+
     setQuantities((prevQuantities) => ({ ...prevQuantities, [productKey]: quantityValue }));
   };
 
@@ -660,8 +698,8 @@ const POSView: React.FC = () => {
     }
   };
 
-  const handleProductCategoriesChange = (selectedOptions: any) => {
-    setSelectedProductCategories(selectedOptions || []);
+  const handleProductCategoriesChange = (newValue: MultiValue<SelectInterface>, actionMeta: ActionMeta<SelectInterface>) => {
+    setSelectedProductCategories((newValue as SelectInterface[]) || []);
   };
 
   const handleProductDescriptionChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -803,6 +841,8 @@ const POSView: React.FC = () => {
           selectPriceType={selectPriceType}
           getProductsApi={getProductsApi}
           onOpenCreateProduct={handleOpenCreateProduct}
+          isSearchActive={searchTerm.trim().length > 0}
+          isFilterActive={Boolean(selectPriceType)}
         />
       </Col>
       <Col md={4} lg={5}>
@@ -858,6 +898,8 @@ const POSView: React.FC = () => {
            selectPriceType={selectPriceType}
            getProductsApi={getProductsApi}
            onOpenCreateProduct={handleOpenCreateProduct}
+           isSearchActive={searchTerm.trim().length > 0}
+           isFilterActive={Boolean(selectPriceType)}
          />
        </Col>
        <Col md={4} lg={5}>

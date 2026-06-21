@@ -6,7 +6,7 @@
         
     <!-- Main page -->
     <url>
-        <loc>https://sinergia-pos.com/</loc>
+        <loc>https://talanton-pos.com/</loc>
         <lastmod>2025-06-08</lastmod>
         <changefreq>monthly</changefreq>
         <priority>1.0</priority>
@@ -14,7 +14,7 @@
     
     <!-- Login page -->
     <url>
-        <loc>https://sinergia-pos.com/login</loc>
+        <loc>https://talanton-pos.com/login</loc>
         <lastmod>2025-06-08</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.8</priority>
@@ -22,7 +22,7 @@
     
     <!-- Register page -->
     <url>
-        <loc>https://sinergia-pos.com/register</loc>
+        <loc>https://talanton-pos.com/register</loc>
         <lastmod>2025-06-08</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.8</priority>
@@ -30,7 +30,7 @@
     
     <!-- Subscribe page -->
     <url>
-        <loc>https://sinergia-pos.com/subscribe</loc>
+        <loc>https://talanton-pos.com/subscribe</loc>
         <lastmod>2025-06-08</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.9</priority>
@@ -38,7 +38,7 @@
     
     <!-- About/Features pages -->
     <url>
-        <loc>https://sinergia-pos.com/features</loc>
+        <loc>https://talanton-pos.com/features</loc>
         <lastmod>2025-06-08</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.7</priority>
@@ -46,7 +46,7 @@
     
     <!-- Pricing page -->
     <url>
-        <loc>https://sinergia-pos.com/pricing</loc>
+        <loc>https://talanton-pos.com/pricing</loc>
         <lastmod>2025-06-08</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.8</priority>
@@ -54,7 +54,7 @@
     
     <!-- Contact/Support page -->
     <url>
-        <loc>https://sinergia-pos.com/contact</loc>
+        <loc>https://talanton-pos.com/contact</loc>
         <lastmod>2025-06-08</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.6</priority>

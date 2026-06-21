@@ -6,13 +6,13 @@ import {
   validateEvent,
   EventEnvelopeSchema,
   type EventType,
-} from '@olympo/contracts';
+} from 'prizma-contracts';
 
 /**
- * Olympo integration hub for Sinergia POS.
+ * Prizma integration hub for Talanton POS.
  *
- * Wraps the canonical `@olympo/contracts` HubClient configured with
- * `source = "sinergia"`. Per the SSOT matrix (ARCHITECTURE.md §4-5) Sinergia
+ * Wraps the canonical `prizma-contracts` HubClient configured with
+ * `source = "talanton"`. Per the SSOT matrix (ARCHITECTURE.md §4-5) Talanton
  * is the owner/emitter of the in-store sale event `venta_pos.creada`
  * (`EVENTS.POS_SALE_CREATED`), so the only first-class publish helper here is
  * `publishPosSaleCreated`. Other events (inventory sync, etc.) can be added as
@@ -24,22 +24,22 @@ import {
  * client's built-in tolerance so the POS keeps working if the Hub is down.
  */
 @Injectable()
-export class OlympoHubService {
-  private readonly logger = new Logger(OlympoHubService.name);
+export class PrizmaHubService {
+  private readonly logger = new Logger(PrizmaHubService.name);
   private readonly client: HubClient;
 
   constructor(private readonly config: ConfigService) {
     const hubUrl =
-      this.config.get<string>('CAUCE_HUB_URL') ||
-      this.config.get<string>('HUB_CENTRAL_URL') ||
+      this.config.get<string>('NOUS_HUB_URL') ??
       'http://localhost:3007';
     const secret =
-      this.config.get<string>('CAUCE_HUB_SECRET') ||
-      this.config.get<string>('HUB_CENTRAL_API_KEY') ||
+      this.config.get<string>('NOUS_HUB_SECRET') ??
       undefined;
 
     this.client = new HubClient({
-      source: 'sinergia',
+      // 'talanton' is the new canonical source; prizma-contracts will add it
+      // to the ServiceSource union in R1-contracts bump. Cast until then.
+      source: 'talanton' as any,
       hubUrl,
       secret,
       // throwOnError stays false: a hub failure must never break a POS sale.
@@ -90,7 +90,7 @@ export class OlympoHubService {
       eventId: 'pre-validate',
       eventType: EVENTS.POS_SALE_CREATED,
       timestamp: new Date().toISOString(),
-      source: 'sinergia' as const,
+      source: 'talanton' as any,
       data,
       priority: 'normal' as const,
     };
