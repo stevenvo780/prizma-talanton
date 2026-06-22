@@ -1,12 +1,12 @@
 {
-  "short_name": "Prizma",
-  "name": "Prizma - Sistema POS",
+  "short_name": "Prizma Talanton",
+  "name": "Prizma Talanton | Sistema POS",
   "description": "Sistema de punto de venta profesional para facturación eficiente e integración empresarial",
   "icons": [
     {
-      "src": "favicon-32.png",
-      "type": "image/png",
-      "sizes": "32x32"
+      "src": "favicon.ico",
+      "type": "image/x-icon",
+      "sizes": "any"
     },
     {
       "src": "apple-touch-icon.png",
@@ -26,7 +26,7 @@
   "background_color": "#ffffff",
   "categories": ["business", "finance", "productivity"],
   "scope": "/",
-  "id": "prizma-pos",
+  "id": "prizma-talanton-pos",
   "lang": "es",
   "dir": "ltr"
 }

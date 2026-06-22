@@ -451,7 +451,7 @@ const POSView: React.FC = () => {
                           error?.message || 
                           'Error al crear la factura';
       
-      if (paymentType === PaymentType.Fiar && errorMessage && 
+      if (paymentType === PaymentType.Pistis && errorMessage && 
           (typeof errorMessage === 'string' && errorMessage.includes('Créditos insuficientes'))) {
         dispatch(addNotification({ 
           message: `${errorMessage}`, 

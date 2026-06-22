@@ -548,7 +548,7 @@ const InvoiceList: React.FC = () => {
                       <option value={PaymentType.GatewayPayment}>Pago por Pasarela</option>
                       <option value={PaymentType.CashOnDelivery}>Pago Contra Entrega</option>
                       <option value={PaymentType.AccountReceivable}>Cuenta por Cobrar</option>
-                      <option value={PaymentType.Fiar}>Fiar</option>
+                      <option value={PaymentType.Pistis}>Crédito Prizma</option>
                     </Form.Control>
                   </Form.Group>
                 </Col>
@@ -683,7 +683,7 @@ const InvoiceList: React.FC = () => {
                       >
                         {invoice.paymentType === PaymentType.GatewayPayment ? 'Pasarela' :
                          invoice.paymentType === PaymentType.CashOnDelivery ? 'Contra Entrega' :
-                         invoice.paymentType === PaymentType.AccountReceivable ? 'Por Cobrar' : 'Fiar'}
+                         invoice.paymentType === PaymentType.AccountReceivable ? 'Por Cobrar' : 'Crédito Prizma'}
                       </Badge>
                     </td>
                     <td>

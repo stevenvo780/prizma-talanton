@@ -38,7 +38,7 @@ const PAYMENT_METHODS = [
   { name: 'Transferencia', Icon: Bank,        type: PaymentType.GatewayPayment,   color: '#3b82f6' },
   { name: 'CxC',           Icon: JournalText, type: PaymentType.AccountReceivable,color: '#f59e0b' },
   { name: 'Tarjetas',      Icon: CreditCard,  type: PaymentType.GatewayPayment,   color: '#6366f1' },
-  { name: 'Fiar',          Icon: HandThumbsUp,  type: PaymentType.Fiar,             color: '#ec4899' },
+  { name: 'Crédito Prizma', Icon: HandThumbsUp,  type: PaymentType.Pistis,          color: '#43b5a6' },
 ];
 
 const PaymentStep: React.FC<PaymentStepProps> = ({

@@ -81,7 +81,7 @@ export enum PaymentType {
   GatewayPayment = 'GatewayPayment',
   CashOnDelivery = 'CashOnDelivery',
   AccountReceivable = 'AccountReceivable',
-  Fiar = 'Fiar',
+  Pistis = 'Pistis',
 }
 
 export enum PaymentStatus {

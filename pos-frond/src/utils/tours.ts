@@ -309,7 +309,7 @@ export const tourSettings: TourStep[] = [
     popover: {
       title: '🧩 Plugins',
       description:
-        'Activa integraciones con terceros como MeraVuelta, Graf o FIAR. Requiere token de autenticación del proveedor.',
+        'Activa integraciones con terceros como Talaria, Hermes o Pistis. Requiere token de autenticación del proveedor.',
       side: 'right',
       align: 'start',
     },
