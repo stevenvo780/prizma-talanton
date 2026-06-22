@@ -178,6 +178,7 @@ const ProductModal: React.FC<ProductModalProps> = ({
     fetchCategoryPricings();
     fetchDiscounts();
     fetchTaxes();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {

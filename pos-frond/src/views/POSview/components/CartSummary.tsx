@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Row, Col, Button, Form, Modal } from 'react-bootstrap';
+import { Button, Form, Modal } from 'react-bootstrap';
 import { Client, Product, ProductPriceType, CategoryPricing } from '../../../utils/types';
 import { CartX, Trash, InfoCircle, ArrowRight, ArrowLeft, PencilFill } from 'react-bootstrap-icons';
 import { fmtCOP as fmt } from '../../../utils/format';
