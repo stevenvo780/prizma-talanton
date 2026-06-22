@@ -84,13 +84,13 @@ const Header: React.FC = () => {
           <Navbar.Brand as={Link} to="/" className="me-auto text-dark d-flex align-items-center">
             <img
               src={`${process.env.PUBLIC_URL}/logo-isotipo.png`}
-              alt="Prizma"
+              alt="Prizma Talanton"
               width={28}
               height={28}
               className="me-2"
               style={{ borderRadius: 8 }}
             />
-            Prizma
+            Prizma Talanton
           </Navbar.Brand>
 
           <div className="d-flex align-items-center ms-auto">

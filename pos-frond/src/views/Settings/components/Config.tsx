@@ -47,7 +47,7 @@ const ConfigView: React.FC = () => {
   const StatBadge: React.FC<{ label: string; val: number }> = ({ label, val }) => (
     <div className="rounded-3 p-3" style={{ background: '#f8f9ff', border: '1px solid #e0e0ff' }}>
       <p style={{ fontSize: '0.7rem', color: '#6366f1', fontWeight: 600, marginBottom: 4, textTransform: 'uppercase', letterSpacing: '0.05em' }}>{label}</p>
-      <p className="fw-bold mb-0" style={{ fontSize: '1.25rem', color: '#1a1a2e' }}>{val}</p>
+      <p className="fw-bold mb-0" style={{ fontSize: '1.25rem', color: '#1a1f36' }}>{val}</p>
     </div>
   );
 

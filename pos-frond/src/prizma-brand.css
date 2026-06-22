@@ -4,14 +4,14 @@
  *
  * Aditivo: se importa DESPUÉS de bootstrap e index.css en src/index.tsx,
  * por lo que ajusta el acento sin reescribir los estilos existentes.
- * El acento del módulo proviene de [data-module="talanton"] (indigo #6366F1)
+ * El acento del módulo proviene de [data-module="talanton"] (indigo #4F52E0)
  * definido por prizma-ui/styles.css.
  */
 
 /* ---- Variables de Bootstrap remapeadas a tokens Prizma ---- */
 :root {
   --bs-primary: var(--c-accent-module);
-  --bs-primary-rgb: 99, 102, 241; /* #6366F1 → acento módulo talanton */
+  --bs-primary-rgb: 79, 82, 224; /* #4F52E0 → acento módulo talanton (Prizma indigo) */
   --bs-link-color: var(--c-primary);
   --bs-link-hover-color: var(--c-primary-hover);
   --bs-body-font-family: var(--c-font-sans);

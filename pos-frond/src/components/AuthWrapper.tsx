@@ -55,7 +55,7 @@ const AuthWrapper: React.FC = () => {
       return (
         <div style={{
           minHeight: '100vh',
-          background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)',
+          background: 'linear-gradient(135deg, #1a1f36 0%, #0f2044 50%, #1e3a5f 100%)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',

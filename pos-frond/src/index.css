@@ -1,38 +1,40 @@
 :root {
-  --primary-color: #FFC313;
-  --secondary-color: #3A3A3A;
-  --success-color: #87CB16;
-  --danger-color: #D16D6A;
-  --warning-color: #FFC313;
-  --info-color: #DFDFE5;
+  /* Prizma design tokens — Talanton module */
+  --primary-color: #43b5a6;       /* Prizma teal */
+  --secondary-color: #4F52E0;     /* Prizma indigo */
+  --accent-color: #e0a85e;        /* Prizma dorado */
+  --success-color: #2ecc71;
+  --danger-color: #e74c3c;
+  --warning-color: #e0a85e;       /* usa dorado Prizma, no mostaza legacy */
+  --info-color: #3498db;
   --light-color: #F5F5F5;
-  --dark-color: #3A3A3A;
+  --dark-color: #1a1f36;
   --white-color: #FFFFFF;
   --muted-color: #BBBBBB;
-  
-  --primary-hover-color: #e6b000;
-  --secondary-hover-color: #2d2d2d;
-  --danger-hover-color: #c25956;
+
+  --primary-hover-color: #38a496;  /* teal oscurecido */
+  --secondary-hover-color: #3c3fb5;
+  --danger-hover-color: #c0392b;
   --light-gray: #D9D9D9;
   --medium-gray: #BBBBBB;
   --dark-gray: #3A3A3A;
   --background-gray: #F0F2F5;
-  
-  --primary-text-color: #000000;
+
+  --primary-text-color: #FFFFFF;
   --secondary-text-color: #FFFFFF;
-  --success-text-color: #000000;
-  --danger-text-color: #000000;
-  --warning-text-color: #000000;
-  --info-text-color: #3A3A3A;
+  --success-text-color: #FFFFFF;
+  --danger-text-color: #FFFFFF;
+  --warning-text-color: #1a1f36;
+  --info-text-color: #FFFFFF;
   --light-text-color: #3A3A3A;
   --dark-text-color: #FFFFFF;
-  
+
   --opacity-light: rgba(255, 255, 255, 0.8);
   --opacity-medium: rgba(255, 255, 255, 0.5);
-  --opacity-dark: rgba(58, 58, 58, 0.7);
-  
+  --opacity-dark: rgba(26, 31, 54, 0.7);
+
   --font-color: #3A3A3A;
-  --font-family-sans-serif: 'Montserrat', "Helvetica", Arial, sans-serif;
+  --font-family-sans-serif: 'Sora', 'Inter', "Helvetica", Arial, sans-serif;
   --border-radius: 12px;
   --border-radius-sm: 8px;
   --border-radius-lg: 16px;

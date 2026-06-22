@@ -13,7 +13,7 @@
 /* ─── LEFT: Showcase ─── */
 .login-showcase {
   flex: 1.15;
-  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 40%, #0f3460 100%);
+  background: linear-gradient(135deg, #1a1f36 0%, #0f2044 40%, #1e3a5f 100%);
   color: #fff;
   position: relative;
   overflow: hidden;
@@ -129,7 +129,7 @@
   justify-content: center;
   width: 48px;
   height: 48px;
-  background: rgba(255, 195, 19, 0.12);
+  background: rgba(67, 181, 166, 0.15);
   border-radius: 12px;
 }
 
@@ -203,7 +203,7 @@
 
 .plan-mini:hover,
 .plan-mini.active {
-  background: rgba(255, 195, 19, 0.1);
+  background: rgba(67, 181, 166, 0.1);
   border-color: var(--primary-color);
   transform: translateY(-4px);
 }
@@ -217,7 +217,7 @@
   top: 8px;
   right: 8px;
   background: var(--primary-color);
-  color: #1a1a2e;
+  color: #1a1f36;
   font-size: 0.6rem;
   font-weight: 800;
   text-transform: uppercase;
@@ -339,7 +339,7 @@
 .login-title {
   font-size: 2rem;
   font-weight: 800;
-  color: #1a1a2e;
+  color: #1a1f36;
   margin-bottom: 0.4rem;
 }
 
@@ -388,7 +388,7 @@
 
 .form-input-modern:focus {
   border-color: var(--primary-color);
-  box-shadow: 0 0 0 4px rgba(255, 195, 19, 0.15);
+  box-shadow: 0 0 0 4px rgba(67, 181, 166, 0.15);
   background: #fff;
 }
 
@@ -398,22 +398,22 @@
 
 /* Primary login button */
 .btn-login-primary {
-  background: linear-gradient(135deg, var(--primary-color) 0%, #e6a800 100%);
-  color: #1a1a2e;
+  background: linear-gradient(135deg, #43b5a6 0%, #2ea99a 100%);
+  color: #ffffff;
   border: none;
   border-radius: 12px;
   padding: 0.8rem;
   font-size: 1rem;
   font-weight: 700;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(255, 195, 19, 0.3);
+  box-shadow: 0 4px 15px rgba(67, 181, 166, 0.35);
 }
 
 .btn-login-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(255, 195, 19, 0.4);
-  background: linear-gradient(135deg, #e6b000 0%, #d4a000 100%);
-  color: #1a1a2e;
+  box-shadow: 0 8px 25px rgba(67, 181, 166, 0.45);
+  background: linear-gradient(135deg, #38a496 0%, #2a9489 100%);
+  color: #ffffff;
 }
 
 .btn-login-primary:active {
@@ -435,8 +435,8 @@
 .spinner {
   width: 18px;
   height: 18px;
-  border: 3px solid rgba(26, 26, 46, 0.2);
-  border-top-color: #1a1a2e;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #ffffff;
   border-radius: 50%;
   animation: spin 0.6s linear infinite;
 }
@@ -513,7 +513,7 @@
 }
 
 .btn-link-modern:hover {
-  color: #e6a800;
+  color: #38a496;
   text-decoration: underline;
 }
 
@@ -526,7 +526,7 @@
 .btn-register-link {
   background: none;
   border: none;
-  color: #1a1a2e;
+  color: #1a1f36;
   font-weight: 700;
   cursor: pointer;
   margin-left: 6px;

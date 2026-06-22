@@ -48,7 +48,7 @@ const Settings: React.FC = () => {
     <Container fluid className="py-3 px-2 px-md-4">
       {/* Page header */}
       <div className="mb-4">
-        <h4 className="fw-bold mb-0" style={{ color: '#1a1a2e' }}>Configuración</h4>
+        <h4 className="fw-bold mb-0" style={{ color: '#1a1f36' }}>Configuración</h4>
         <small className="text-muted">Gestiona todos los parámetros del sistema</small>
       </div>
 

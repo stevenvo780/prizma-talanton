@@ -885,7 +885,7 @@ const ANIMATIONS_CSS = `
 const S: Record<string, React.CSSProperties> = {
   fullPage: {
     minHeight: '100vh',
-    background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)',
+    background: 'linear-gradient(135deg, #1a1f36 0%, #0f2044 50%, #1e3a5f 100%)',
     display: 'flex',
     alignItems: 'flex-start',
     justifyContent: 'center',
@@ -937,7 +937,7 @@ const S: Record<string, React.CSSProperties> = {
   },
   stepTitle: {
     fontWeight: 700,
-    color: '#1a1a2e',
+    color: '#1a1f36',
     fontSize: '1.15rem',
     marginBottom: 6,
   },
@@ -979,7 +979,7 @@ const S: Record<string, React.CSSProperties> = {
     border: 'none',
     borderRadius: 8,
     fontWeight: 700,
-    color: '#1a1a2e',
+    color: '#1a1f36',
     padding: '10px 24px',
     fontSize: 14,
   },

@@ -74,7 +74,7 @@ const TutorialButton: React.FC = () => {
             justifyContent: 'center',
             border: '1.5px solid var(--medium-gray, #ccc)',
             backgroundColor: 'transparent',
-            color: 'var(--primary-color, #0a827f)',
+            color: 'var(--primary-color, #43b5a6)',
             marginRight: 4,
           }}
           onClick={() => {
@@ -131,7 +131,7 @@ const TutorialButton: React.FC = () => {
             }}
             style={menuItemStyle}
           >
-            <QuestionCircleFill size={14} style={{ marginRight: 8, color: '#0a827f' }} />
+            <QuestionCircleFill size={14} style={{ marginRight: 8, color: '#43b5a6' }} />
             {hasSeenCurrent ? 'Repetir tutorial' : 'Ver tutorial'}
           </button>
 

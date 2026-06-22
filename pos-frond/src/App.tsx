@@ -21,7 +21,7 @@ function App() {
         loading === true && (
           <div className="loader">
             <RingLoader
-              color={'#0a827f'}
+              color={'#43b5a6'}
               loading={loading}
               cssOverride={override}
               size={100}
