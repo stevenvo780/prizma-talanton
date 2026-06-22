@@ -755,7 +755,7 @@ const OnboardingWizard: React.FC<OnboardingWizardProps> = ({ onComplete }) => {
                         ¡Tu comercio está listo!
                       </h3>
                       <p style={{ ...S.stepDesc, marginBottom: 24 }}>
-                        Ya puedes empezar a facturar con Sinergia POS.
+                        Ya puedes empezar a facturar con Prizma POS.
                       </p>
 
                       <div style={S.summaryBox}>
@@ -792,7 +792,7 @@ const OnboardingWizard: React.FC<OnboardingWizardProps> = ({ onComplete }) => {
             </Card>
 
             <p className="text-center mt-3" style={{ color: 'rgba(255,255,255,0.35)', fontSize: 12 }}>
-              Sinergia POS · Configuración inicial
+              Prizma POS · Configuración inicial
             </p>
 
           </Col>

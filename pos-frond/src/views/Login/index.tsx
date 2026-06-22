@@ -166,9 +166,9 @@ const LoginPage: React.FC = () => {
         <div className="showcase-content">
           <div className="showcase-header">
             <Image
-              src="/logo.svg"
+              src="/logo-lockup.png"
               className="showcase-logo"
-              alt="Prizma Sinergia"
+              alt="Prizma"
             />
             <p className="showcase-tagline">
               El sistema de punto de venta más completo de Colombia
@@ -252,9 +252,9 @@ const LoginPage: React.FC = () => {
         <div className="login-form-container">
           <div className="login-form-header">
             <Image
-              src="/logo.svg"
+              src="/logo-lockup.png"
               className="login-mobile-logo"
-              alt="Prizma Sinergia"
+              alt="Prizma"
             />
             <h2 className="login-title">Bienvenido</h2>
             <p className="login-subtitle">
@@ -372,7 +372,7 @@ const LoginPage: React.FC = () => {
         </div>
 
         <div className="login-form-footer">
-          <p>© 2026 Prizma Sinergia by <a href="https://prisma-enterprice.cloud" target="_blank" rel="noopener noreferrer">Prizma</a></p>
+          <p>© 2026 Prizma by <a href="https://prisma-enterprice.cloud" target="_blank" rel="noopener noreferrer">Prizma</a></p>
         </div>
       </div>
 

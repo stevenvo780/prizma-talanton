@@ -251,7 +251,7 @@ const DianConfig: React.FC = () => {
             </ListGroup>
             <Alert variant="light" className="mt-3 mb-0">
               <small>
-                <strong><LightbulbFill className="me-1" /> Importante:</strong> Cada empresa que use Sinergia POS debe crear su propia cuenta de Alegra
+                <strong><LightbulbFill className="me-1" /> Importante:</strong> Cada empresa que use Prizma POS debe crear su propia cuenta de Alegra
                 con su NIT y resolución DIAN. Así cada negocio factura bajo su propia identidad fiscal.
               </small>
             </Alert>

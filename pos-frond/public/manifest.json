@@ -1,21 +1,21 @@
 {
-  "short_name": "Prizma Sinergia",
-  "name": "Prizma Sinergia - Sistema POS",
+  "short_name": "Prizma",
+  "name": "Prizma - Sistema POS",
   "description": "Sistema de punto de venta profesional para facturación eficiente e integración empresarial",
   "icons": [
     {
-      "src": "favicon.svg",
-      "type": "image/svg+xml",
-      "sizes": "any"
+      "src": "favicon-32.png",
+      "type": "image/png",
+      "sizes": "32x32"
     },
     {
-      "src": "logo.svg",
-      "type": "image/svg+xml",
-      "sizes": "192x192"
+      "src": "apple-touch-icon.png",
+      "type": "image/png",
+      "sizes": "180x180"
     },
     {
-      "src": "logo.svg",
-      "type": "image/svg+xml",
+      "src": "icon-512.png",
+      "type": "image/png",
       "sizes": "512x512"
     }
   ],
@@ -26,7 +26,7 @@
   "background_color": "#ffffff",
   "categories": ["business", "finance", "productivity"],
   "scope": "/",
-  "id": "prizma-sinergia",
+  "id": "prizma-pos",
   "lang": "es",
   "dir": "ltr"
 }
