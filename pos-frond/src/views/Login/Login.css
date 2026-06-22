@@ -87,9 +87,9 @@
 
 .showcase-tagline {
   font-size: 1.15rem;
-  opacity: 0.8;
+  opacity: 0.9; /* was 0.8 — raised for better readability */
   line-height: 1.6;
-  font-weight: 300;
+  font-weight: 400; /* was 300 — raised for legibility */
 }
 
 /* Feature carousel */
@@ -179,7 +179,7 @@
   font-size: 0.85rem;
   text-transform: uppercase;
   letter-spacing: 2px;
-  opacity: 0.5;
+  opacity: 0.85; /* was 0.5 — raised for WCAG AA on dark bg */
   margin-bottom: 1rem;
   font-weight: 600;
 }
@@ -216,8 +216,8 @@
   position: absolute;
   top: 8px;
   right: 8px;
-  background: var(--primary-color);
-  color: #1a1f36;
+  background: #1f7a70; /* darker teal — #fff on #1f7a70 = 4.6:1, WCAG AA */
+  color: #ffffff;
   font-size: 0.6rem;
   font-weight: 800;
   text-transform: uppercase;
@@ -252,7 +252,7 @@
 
 .plan-mini-price .period {
   font-size: 0.7rem;
-  opacity: 0.6;
+  opacity: 0.85; /* was 0.6 — raised for WCAG AA */
 }
 
 .plan-mini-features {
@@ -260,7 +260,7 @@
   padding: 0;
   margin: 0;
   font-size: 0.72rem;
-  opacity: 0.7;
+  opacity: 0.88; /* was 0.7 — raised for WCAG AA on dark bg */
 }
 
 .plan-mini-features li {
@@ -302,7 +302,7 @@
   font-size: 0.72rem;
   text-transform: uppercase;
   letter-spacing: 1px;
-  opacity: 0.5;
+  opacity: 0.8; /* was 0.5 — raised for WCAG AA on dark bg */
 }
 
 .stat-divider {
@@ -396,9 +396,9 @@
   color: #bbb;
 }
 
-/* Primary login button */
+/* Primary login button — uses #1f7a70 (dark teal, 4.6:1 on white) */
 .btn-login-primary {
-  background: linear-gradient(135deg, #43b5a6 0%, #2ea99a 100%);
+  background: linear-gradient(135deg, #1f7a70 0%, #186560 100%);
   color: #ffffff;
   border: none;
   border-radius: 12px;
@@ -406,13 +406,13 @@
   font-size: 1rem;
   font-weight: 700;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(67, 181, 166, 0.35);
+  box-shadow: 0 4px 15px rgba(31, 122, 112, 0.35);
 }
 
 .btn-login-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(67, 181, 166, 0.45);
-  background: linear-gradient(135deg, #38a496 0%, #2a9489 100%);
+  box-shadow: 0 8px 25px rgba(31, 122, 112, 0.45);
+  background: linear-gradient(135deg, #186560 0%, #114d49 100%);
   color: #ffffff;
 }
 
@@ -504,7 +504,7 @@
 .btn-link-modern {
   background: none;
   border: none;
-  color: var(--primary-color);
+  color: #1f7a70; /* dark teal — 4.6:1 on white, WCAG AA */
   font-size: 0.9rem;
   font-weight: 600;
   cursor: pointer;
@@ -513,7 +513,7 @@
 }
 
 .btn-link-modern:hover {
-  color: #38a496;
+  color: #114d49;
   text-decoration: underline;
 }
 
@@ -529,17 +529,17 @@
   color: #1a1f36;
   font-weight: 700;
   cursor: pointer;
-  margin-left: 6px;
+  margin-left: 4px;
   padding: 0;
   transition: color 0.2s;
   text-decoration: underline;
-  text-decoration-color: var(--primary-color);
+  text-decoration-color: #1f7a70;
   text-underline-offset: 3px;
   text-decoration-thickness: 2px;
 }
 
 .btn-register-link:hover {
-  color: var(--primary-color);
+  color: #1f7a70; /* dark teal — 4.6:1 on white, WCAG AA */
 }
 
 /* Footer */
@@ -558,7 +558,7 @@
 }
 
 .login-form-footer a {
-  color: var(--primary-color);
+  color: #1f7a70; /* dark teal — 4.6:1 on white, WCAG AA */
   text-decoration: none;
   font-weight: 600;
 }

@@ -150,7 +150,7 @@ const RegisterModal: React.FC<RegisterModalProps> = ({ show, onHide }) => {
         <Modal.Title>Registro de Usuario</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <Form onSubmit={handleSubmit}>
+        <Form id="register-form" onSubmit={handleSubmit}>
           <Row>
             <Col md={6}>
               <Form.Group className="mb-3" controlId="formBasicEmail">
@@ -219,12 +219,13 @@ const RegisterModal: React.FC<RegisterModalProps> = ({ show, onHide }) => {
         </Form>
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="secondary" onClick={handleClose}>
+        <Button variant="secondary" type="button" onClick={handleClose}>
           Cancelar
         </Button>
-        <Button 
-          variant="primary" 
-          onClick={handleSubmit}
+        <Button
+          variant="primary"
+          type="submit"
+          form="register-form"
           disabled={isLoading}
         >
           {isLoading ? 'Registrando...' : 'Registrar'}

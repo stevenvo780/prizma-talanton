@@ -16,7 +16,7 @@ Disallow: /api
 Disallow: /private
 
 # Sitemap location
-Sitemap: https://talanton.prisma-enterprice.cloud/sitemap.xml
+Sitemap: https://talanton.prizma.cloud/sitemap.xml
 
 # Crawl delay for better server performance
 Crawl-delay: 1

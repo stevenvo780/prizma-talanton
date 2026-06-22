@@ -5,28 +5,28 @@
         http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
         
     <url>
-        <loc>https://talanton.prisma-enterprice.cloud/</loc>
+        <loc>https://talanton.prizma.cloud/</loc>
         <lastmod>2026-06-22</lastmod>
         <changefreq>monthly</changefreq>
         <priority>1.0</priority>
     </url>
     
     <url>
-        <loc>https://talanton.prisma-enterprice.cloud/login</loc>
+        <loc>https://talanton.prizma.cloud/login</loc>
         <lastmod>2026-06-22</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.8</priority>
     </url>
     
     <url>
-        <loc>https://talanton.prisma-enterprice.cloud/register</loc>
+        <loc>https://talanton.prizma.cloud/register</loc>
         <lastmod>2026-06-22</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.8</priority>
     </url>
     
     <url>
-        <loc>https://talanton.prisma-enterprice.cloud/subscribe</loc>
+        <loc>https://talanton.prizma.cloud/subscribe</loc>
         <lastmod>2026-06-22</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.9</priority>

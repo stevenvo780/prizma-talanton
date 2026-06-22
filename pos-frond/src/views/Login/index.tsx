@@ -23,8 +23,8 @@ import './Login.css';
 
 const PLANS = [
   { name: 'Básico',    price: '49.000',  features: ['200 facturas/mes', 'POS web + API REST', 'Webhooks básicos'] },
-  { name: 'Estándar',  price: '99.000',  features: ['1.000 facturas/mes', 'POS end-to-end + API + Webhooks', 'DIAN automática'], popular: true },
-  { name: 'Premium',   price: '199.000', features: ['Facturas ilimitadas', 'API + Webhooks sin límites', 'SDK + soporte 24/7'] },
+  { name: 'Estándar',  price: '99.000',  features: ['1.000 facturas/mes', 'POS completo + API + Webhooks', 'DIAN automática'], popular: true },
+  { name: 'Premium',   price: '199.000', features: ['Facturas ilimitadas', 'API y webhooks sin límite', 'SDK + soporte 24/7'] },
 ];
 
 const FEATURES = [
@@ -288,12 +288,15 @@ const LoginPage: React.FC = () => {
           ) : (
             <>
               <Form onSubmit={handleSubmit} className="login-form">
-                <Form.Group className="mb-3">
-                  <Form.Label className="form-label-modern">Correo</Form.Label>
+                <Form.Group className="mb-3" controlId="login-email">
+                  <Form.Label className="form-label-modern" htmlFor="login-email">Correo electrónico</Form.Label>
                   <div className="input-icon-wrapper">
                     <span className="input-icon"><EnvelopeAt size={18} /></span>
                     <Form.Control
+                      id="login-email"
+                      name="email"
                       type="email"
+                      autoComplete="email"
                       placeholder="tu@empresa.com"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
@@ -301,12 +304,15 @@ const LoginPage: React.FC = () => {
                     />
                   </div>
                 </Form.Group>
-                <Form.Group className="mb-4">
-                  <Form.Label className="form-label-modern">Contraseña</Form.Label>
+                <Form.Group className="mb-4" controlId="login-password">
+                  <Form.Label className="form-label-modern" htmlFor="login-password">Contraseña</Form.Label>
                   <div className="input-icon-wrapper">
                     <span className="input-icon"><ShieldLock size={18} /></span>
                     <Form.Control
+                      id="login-password"
+                      name="password"
                       type="password"
+                      autoComplete="current-password"
                       placeholder="••••••••"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
@@ -335,9 +341,12 @@ const LoginPage: React.FC = () => {
               </div>
 
               <Button
+                variant="light"
                 className="btn-google w-100"
                 onClick={handleGoogleLogin}
                 disabled={isLoading}
+                type="button"
+                aria-label="Iniciar sesión con Google"
               >
                 <svg className="google-icon" viewBox="0 0 24 24" width="20" height="20">
                   <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/>
@@ -357,7 +366,7 @@ const LoginPage: React.FC = () => {
                   ¿Olvidaste tu contraseña?
                 </button>
                 <div className="register-cta">
-                  <span>¿No tienes cuenta?</span>
+                  <span>¿No tienes cuenta? </span>
                   <button
                     type="button"
                     className="btn-register-link"
@@ -372,7 +381,7 @@ const LoginPage: React.FC = () => {
         </div>
 
         <div className="login-form-footer">
-          <p>© 2026 <a href="https://talanton.prisma-enterprice.cloud" target="_blank" rel="noopener noreferrer">Prizma Talanton</a> · Suite empresarial <a href="https://prisma-enterprice.cloud" target="_blank" rel="noopener noreferrer">Prizma</a></p>
+          <p>© {new Date().getFullYear()} <a href="https://talanton.prizma.cloud" target="_blank" rel="noopener noreferrer">Prizma Talanton</a> · Suite empresarial <a href="https://prizma.cloud" target="_blank" rel="noopener noreferrer">Prizma</a> · <a href="https://prizma.cloud/terminos" target="_blank" rel="noopener noreferrer">Términos</a> · <a href="https://prizma.cloud/privacidad" target="_blank" rel="noopener noreferrer">Privacidad</a> · <a href="https://prizma.cloud/habeas-data" target="_blank" rel="noopener noreferrer">Habeas Data</a></p>
         </div>
       </div>
 
