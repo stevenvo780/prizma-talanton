@@ -16,7 +16,7 @@ Disallow: /api
 Disallow: /private
 
 # Sitemap location
-Sitemap: https://fiar.humanizar.cloud/sitemap.xml
+Sitemap: https://talanton.prisma-enterprice.cloud/sitemap.xml
 
 # Crawl delay for better server performance
 Crawl-delay: 1
