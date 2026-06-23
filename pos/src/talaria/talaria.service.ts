@@ -32,9 +32,9 @@ export class TalariaService {
       return;
     }
 
-    const meraVueltaUrl =
+    const talariaUrl =
       process.env.TALARIA_API_URL || 'http://localhost:3006/api';
-    const endpoint = `${meraVueltaUrl}/order`;
+    const endpoint = `${talariaUrl}/order`;
     try {
       const invoiceData = this.transformInvoiceToInvoiceData(invoice);
       const response = await axios.post(endpoint, invoiceData, {
